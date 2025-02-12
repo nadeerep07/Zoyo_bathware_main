@@ -170,16 +170,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return false;
   }
 
-  // Alert for deleting categories
   void _showDeleteConfirmationDialog(
       BuildContext context, Category category) async {
     bool isCategoryUsed = await _isCategoryUsed(category.id);
 
     if (isCategoryUsed) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text("Cannot delete. Category is linked to a product.")),
-      );
+      _showCategoryInUseDialog(context);
       return;
     }
 
@@ -191,7 +187,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           content: Text("Are you sure you want to delete '${category.name}'?"),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(), // Close dialog
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text("Cancel"),
             ),
             TextButton(
@@ -200,6 +196,27 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 Navigator.of(context).pop(); // Close dialog after deleting
               },
               child: const Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showCategoryInUseDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Cannot Delete"),
+          content: const Text(
+            "This category is linked to a product and cannot be deleted.",
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(), // Close the dialog
+              child: const Text("OK"),
             ),
           ],
         );

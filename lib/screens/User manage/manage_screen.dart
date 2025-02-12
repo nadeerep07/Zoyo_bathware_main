@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/screens/User%20manage/NavigatingScreens/added_product_screen.dart';
 import 'package:zoyo_bathware/screens/User%20manage/Add%20And%20Edit/Product%20section/product_add_edit.dart';
 import 'package:zoyo_bathware/screens/User%20manage/Add%20And%20Edit/category%20section/category_screen.dart';
+import 'package:zoyo_bathware/screens/User%20manage/Product_purchase/purchase_screen.dart';
+import 'package:zoyo_bathware/screens/User%20manage/Product_purchase/purchased_product_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
 
@@ -82,10 +84,11 @@ class ManageScreen extends StatelessWidget {
                 context, Icons.category, " Category", CategoryScreen()),
             _buildManageItem(
                 context, Icons.inventory_2, "Product", ProductScreen()),
-            // _buildManageItem(context, Icons.history, "Purchase History",
-            //     PurchaseScreen()), // Optional
-            // _buildManageItem(
-            //     context, Icons.share, "Share App", ShareApp()), // Optional
+            _buildManageItem(context, Icons.history, "Purchase History",
+                PurchasedProductsScreen()), // Optional
+            _buildManageItem(context, Icons.production_quantity_limits,
+                "Purchase ", PurchaseProductScreen()), // Optional
+
             // _buildManageItem(
             //     context, Icons.settings, "Settings", Settings()), // Optional
           ],

@@ -29,7 +29,10 @@ class _HomeScreenState extends State<HomeScreen> {
     log('data fetching: ${box.length}');
     final products = box.values.toList();
     products.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
-    productsNotifier.value = products; // Update the notifier
+    productsNotifier.value = products.take(4).toList();
+    /**
+    * *change the number product to show in new arrivals .............................
+    */
   }
 
   List<Product> products = [];
@@ -139,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'All Products',
+                  'New Arrivals',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 TextButton(
