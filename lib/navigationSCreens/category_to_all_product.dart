@@ -16,6 +16,8 @@ class CategoryToAllProduct extends StatefulWidget {
 
 class _CategoryToAllProductState extends State<CategoryToAllProduct> {
   List<Product> filteredProducts = [];
+  ValueNotifier<bool> isGridView =
+      ValueNotifier<bool>(true); // For toggling view
 
   @override
   void initState() {
@@ -28,7 +30,6 @@ class _CategoryToAllProductState extends State<CategoryToAllProduct> {
     filteredProducts = getAllProductsSync()
         .where((product) => product.category == widget.category.name)
         .toList();
-
     setState(() {});
   }
 
@@ -39,6 +40,15 @@ class _CategoryToAllProductState extends State<CategoryToAllProduct> {
         leading: backButton(context),
         title: Text(widget.category.name),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.view_list),
+            onPressed: () {
+              // Toggle between list and grid view
+              isGridView.value = !isGridView.value;
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -49,16 +59,35 @@ class _CategoryToAllProductState extends State<CategoryToAllProduct> {
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               )
-            : GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.6, // Slightly taller cards
-                ),
-                itemCount: filteredProducts.length,
-                itemBuilder: (context, index) {
-                  return ProductCard(product: filteredProducts[index]);
+            : ValueListenableBuilder<bool>(
+                valueListenable: isGridView,
+                builder: (context, isGrid, _) {
+                  return isGrid
+                      ? GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 0.63, // Slightly taller cards
+                          ),
+                          itemCount: filteredProducts.length,
+                          itemBuilder: (context, index) {
+                            return ProductCard(
+                              product: filteredProducts[index],
+                              isGridView: true,
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          itemCount: filteredProducts.length,
+                          itemBuilder: (context, index) {
+                            return ProductCard(
+                              product: filteredProducts[index],
+                              isGridView: false,
+                            );
+                          },
+                        );
                 },
               ),
       ),

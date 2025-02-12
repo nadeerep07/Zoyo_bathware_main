@@ -37,6 +37,9 @@ class Product {
   @HiveField(10)
   String? id;
 
+  @HiveField(11)
+  DateTime? createdAt;
+
   Product({
     required this.productName,
     required this.productCode,
@@ -49,6 +52,7 @@ class Product {
     required this.category,
     required this.imagePaths,
     required this.id,
+    required this.createdAt,
   });
   @override
   String toString() {

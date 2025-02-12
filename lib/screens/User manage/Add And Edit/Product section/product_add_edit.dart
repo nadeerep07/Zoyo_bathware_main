@@ -81,6 +81,7 @@ class _ProductAddEditState extends State<ProductAddEdit> {
       description: _controllers.description.text,
       category: _selectedCategory!,
       imagePaths: _selectedImages.map((file) => file.path).toList(),
+      createdAt: DateTime.now(),
     );
   }
 

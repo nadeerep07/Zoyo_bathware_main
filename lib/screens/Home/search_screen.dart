@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/database/CrudOperations/category_db.dart';
 import 'package:zoyo_bathware/utilitis/product_card.dart';
@@ -24,6 +23,9 @@ class _SearchScreenState extends State<SearchScreen> {
   double _minPrice = 0;
   double _maxPrice = 25000; // Set default max price as per your data
   bool showOutOfStock = true;
+
+  // Flag to show/hide filters
+  bool showFilters = false;
 
   @override
   void initState() {
@@ -75,11 +77,12 @@ class _SearchScreenState extends State<SearchScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              _searchController.clear();
-              _filterProducts('');
+              setState(() {
+                showFilters = !showFilters; // Toggle filter visibility
+              });
             },
             child: Text(
-              "Cancel",
+              "Sort Product",
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -114,116 +117,119 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
           ),
-          // Filters UI
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                // Category Filter
-                ValueListenableBuilder<List<Category>>(
-                  valueListenable: CategoryDatabaseHelper.categoriesNotifier,
-                  builder: (context, categories, _) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
+
+          // Show Filters only if showFilters is true
+          if (showFilters)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  // Category Filter
+                  ValueListenableBuilder<List<Category>>(
+                    valueListenable: CategoryDatabaseHelper.categoriesNotifier,
+                    builder: (context, categories, _) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: DropdownButton<String>(
+                          value: selectedCategory,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedCategory = newValue!;
+                              _filterProducts(_searchController.text);
+                            });
+                          },
+                          isExpanded: true,
+                          underline: Container(),
+                          icon: const Icon(Icons.arrow_drop_down,
+                              color: Colors.black),
+                          items: [
+                                'All Categories'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList() +
+                              categories
+                                  .map<DropdownMenuItem<String>>((category) {
+                                return DropdownMenuItem<String>(
+                                  value: category.name,
+                                  child: Text(category.name),
+                                );
+                              }).toList(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Price Range Filter
+                  Column(
+                    children: [
+                      const Text(
+                        'Price Range',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600),
                       ),
-                      child: DropdownButton<String>(
-                        value: selectedCategory,
-                        onChanged: (String? newValue) {
+                      RangeSlider(
+                        values: RangeValues(_minPrice, _maxPrice),
+                        min: 0,
+                        max: 25000,
+                        divisions: 10,
+                        labels: RangeLabels('₹$_minPrice', '₹$_maxPrice'),
+                        onChanged: (RangeValues values) {
                           setState(() {
-                            selectedCategory = newValue!;
+                            _minPrice = values.start;
+                            _maxPrice = values.end;
                             _filterProducts(_searchController.text);
                           });
                         },
-                        isExpanded: true,
-                        underline: Container(),
-                        icon: const Icon(Icons.arrow_drop_down,
-                            color: Colors.black),
-                        items: ['All Categories']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList() +
-                            categories
-                                .map<DropdownMenuItem<String>>((category) {
-                              return DropdownMenuItem<String>(
-                                value: category.name,
-                                child: Text(category.name),
-                              );
-                            }).toList(),
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('₹${_minPrice.toInt()}'),
+                          Text('₹${_maxPrice.toInt()}'),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
 
-                // Price Range Filter
-                Column(
-                  children: [
-                    const Text(
-                      'Price Range',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                    RangeSlider(
-                      values: RangeValues(_minPrice, _maxPrice),
-                      min: 0,
-                      max: 25000,
-                      divisions: 10,
-                      labels: RangeLabels('₹$_minPrice', '₹$_maxPrice'),
-                      onChanged: (RangeValues values) {
-                        setState(() {
-                          _minPrice = values.start;
-                          _maxPrice = values.end;
-                          _filterProducts(_searchController.text);
-                        });
-                      },
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('₹${_minPrice.toInt()}'),
-                        Text('₹${_maxPrice.toInt()}'),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Out of Stock Filter
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Show Out of Stock",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    Switch(
-                      value: showOutOfStock,
-                      onChanged: (bool value) {
-                        setState(() {
-                          showOutOfStock = value;
-                          _filterProducts(_searchController.text);
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
+                  // Out of Stock Filter
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Show Out of Stock",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      Switch(
+                        value: showOutOfStock,
+                        onChanged: (bool value) {
+                          setState(() {
+                            showOutOfStock = value;
+                            _filterProducts(_searchController.text);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
           Expanded(
             child: ValueListenableBuilder<List<Product>>(
               valueListenable: productsNotifier,
@@ -249,7 +255,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemCount: displayedProducts.length,
                   itemBuilder: (context, index) {
                     final product = displayedProducts[index];
-                    return ProductCard(product: product);
+                    return ProductCard(
+                      isGridView: true,
+                      product: product,
+                    );
                   },
                 );
               },

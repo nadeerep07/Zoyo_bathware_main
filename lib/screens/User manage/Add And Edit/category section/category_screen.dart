@@ -58,7 +58,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               crossAxisCount: 2, // 2 columns in grid
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              childAspectRatio: 0.8, // Aspect ratio of the card
+              childAspectRatio: 0.76, // Aspect ratio of the card
             ),
             itemCount: categories.length,
             itemBuilder: (context, index) {
