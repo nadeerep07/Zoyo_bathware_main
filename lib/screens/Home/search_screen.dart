@@ -32,7 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getAllProducts(); // Fetch products after the first frame
-      CategoryDatabaseHelper.getAllCategories(); // Fetch categories on init
+      getAllCategories(); // Fetch categories on init
     });
   }
 
@@ -126,7 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 children: [
                   // Category Filter
                   ValueListenableBuilder<List<Category>>(
-                    valueListenable: CategoryDatabaseHelper.categoriesNotifier,
+                    valueListenable: categoriesNotifier,
                     builder: (context, categories, _) {
                       return Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12),

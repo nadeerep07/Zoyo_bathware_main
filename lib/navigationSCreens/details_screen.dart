@@ -1,7 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:zoyo_bathware/database/CrudOperations/cart_db.dart';
+import 'package:zoyo_bathware/database/cart_model.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 
 const String productBox = 'products';
@@ -125,8 +128,10 @@ class ProductDetailScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Add to cart functionality
+                  onPressed: () async {
+                    // addToCart(product);
+                    updateQuantity(product, 1);
+                    log('product aded:${product}');
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Added to cart!')),
                     );

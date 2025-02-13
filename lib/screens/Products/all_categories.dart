@@ -18,7 +18,7 @@ class _AllCategoriesState extends State<AllCategories> {
   @override
   void initState() {
     super.initState();
-    CategoryDatabaseHelper.getAllCategories();
+    getAllCategories();
   }
 
   @override
@@ -58,9 +58,13 @@ class _AllCategoriesState extends State<AllCategories> {
           children: [
             Expanded(
               child: ValueListenableBuilder<List<Category>>(
-                valueListenable: CategoryDatabaseHelper.categoriesNotifier,
+                valueListenable: categoriesNotifier,
                 builder: (context, categories, child) {
-                  if (categories.isEmpty) {
+                  final filteredCategories = categories
+                      .where((category) =>
+                          category.name.toLowerCase().trim() != 'cabinet')
+                      .toList();
+                  if (filteredCategories.isEmpty) {
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -99,9 +103,9 @@ class _AllCategoriesState extends State<AllCategories> {
                                 mainAxisSpacing: 16,
                                 childAspectRatio: aspectRatio,
                               ),
-                              itemCount: categories.length,
+                              itemCount: filteredCategories.length,
                               itemBuilder: (context, index) {
-                                final category = categories[index];
+                                final category = filteredCategories[index];
                                 return CategoryCard(
                                   category: category,
                                   isGridView: isGridView, // Pass the view mode
@@ -111,9 +115,9 @@ class _AllCategoriesState extends State<AllCategories> {
                           },
                         )
                       : ListView.builder(
-                          itemCount: categories.length,
+                          itemCount: filteredCategories.length,
                           itemBuilder: (context, index) {
-                            final category = categories[index];
+                            final category = filteredCategories[index];
                             return CategoryCard(
                               category: category,
                               isGridView: isGridView, // Pass the view mode

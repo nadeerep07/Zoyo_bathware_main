@@ -35,7 +35,7 @@ class _ProductAddEditState extends State<ProductAddEdit> {
   @override
   void initState() {
     super.initState();
-    CategoryDatabaseHelper.getAllCategories();
+    getAllCategories();
     _initializeData();
   }
 
@@ -268,7 +268,7 @@ class _ProductAddEditState extends State<ProductAddEdit> {
 
   Widget _buildCategorySection() {
     return ValueListenableBuilder<List<Category>>(
-      valueListenable: CategoryDatabaseHelper.categoriesNotifier,
+      valueListenable: categoriesNotifier,
       builder: (context, categories, _) {
         if (categories.isEmpty) return const Text('No categories available');
 

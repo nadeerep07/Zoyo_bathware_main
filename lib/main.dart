@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:zoyo_bathware/database/cart_model.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
 import 'package:zoyo_bathware/screens/splash_screen.dart';
@@ -10,6 +11,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ProductAdapter());
   Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(CartAdapter());
   await Hive.openBox<Product>('products'); //box opeened
   runApp(MyApp());
 }

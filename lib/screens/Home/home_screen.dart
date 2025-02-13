@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:zoyo_bathware/database/category_model.dart';
 import 'package:zoyo_bathware/navigationSCreens/details_screen.dart';
 import 'package:zoyo_bathware/screens/Cart%20Section/CArt_screen.dart';
 import 'package:zoyo_bathware/screens/Home/search_screen.dart';
 import 'package:zoyo_bathware/screens/Products/all_categories.dart';
 import 'package:zoyo_bathware/screens/User%20manage/manage_screen.dart';
+import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
@@ -60,6 +62,12 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => AllCategories()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CabinetScreen()),
         );
         break;
       case 3:

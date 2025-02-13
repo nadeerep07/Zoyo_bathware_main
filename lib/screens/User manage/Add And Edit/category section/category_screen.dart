@@ -21,11 +21,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
   void initState() {
     super.initState();
     openHiveBox();
-    CategoryDatabaseHelper.getAllCategories();
   }
 
-  void openHiveBox() async {
-    categoryBox = await Hive.box<Category>(CategoryDatabaseHelper.categoryBox);
+  Future<void> openHiveBox() async {
+    categoryBox = await Hive.openBox<Category>('categories');
+    setState(() {});
+    getAllCategories();
   }
 
   void showCategoryDialog({Category? category, int? index}) {
@@ -45,12 +46,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
         backgroundColor: AppColors.primaryColor,
       ),
       body: ValueListenableBuilder<List<Category>>(
-        valueListenable: CategoryDatabaseHelper.categoriesNotifier,
+        valueListenable: categoriesNotifier,
         builder: (context, categories, _) {
           if (categories.isEmpty) {
             return const Center(
                 child: Text("No categories added",
                     style: TextStyle(fontSize: 18, color: Colors.grey)));
+          }
+          if (categoryBox == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
           return GridView.builder(
             padding: const EdgeInsets.all(8),
@@ -192,7 +198,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             ),
             TextButton(
               onPressed: () {
-                CategoryDatabaseHelper.deleteCategory(category.id);
+                deleteCategory(category.id);
                 Navigator.of(context).pop(); // Close dialog after deleting
               },
               child: const Text("Delete", style: TextStyle(color: Colors.red)),

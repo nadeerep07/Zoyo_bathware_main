@@ -3,75 +3,74 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
 
-class CategoryDatabaseHelper {
-  static const String categoryBox = 'categories';
+const String categoryBox = 'categories';
+late Box<Category> _categoryBox;
 
-  static late Box<Category> _categoryBox;
+final ValueNotifier<List<Category>> categoriesNotifier = ValueNotifier([]);
+bool _isInitialized = false; // Track initialization status
 
-  static final ValueNotifier<List<Category>> categoriesNotifier =
-      ValueNotifier([]);
+/// Initialize Hive Boxes
+Future<void> init() async {
+  if (_isInitialized) return; // If already initialized, do nothing
 
-  /// Initialize Hive Boxes
-  static Future<void> init() async {
-    try {
-      if (!Hive.isBoxOpen(categoryBox)) {
-        _categoryBox = await Hive.openBox<Category>(categoryBox);
-      } else {
-        _categoryBox = Hive.box<Category>(categoryBox);
-      }
-
-      await getAllCategories();
-    } catch (e) {
-      log('Error initializing boxes: $e');
+  try {
+    if (!Hive.isBoxOpen(categoryBox)) {
+      _categoryBox = await Hive.openBox<Category>(categoryBox);
+    } else {
+      _categoryBox = Hive.box<Category>(categoryBox);
     }
+    _isInitialized = true; // Mark as initialized
+    await getAllCategories();
+  } catch (e) {
+    log('Error initializing boxes: $e');
   }
+}
 
-  /// Add Category
-  static Future<void> addCategory(Category category) async {
-    if (!Hive.isBoxOpen(categoryBox)) await init();
+/// Add Category
+Future<void> addCategory(Category category) async {
+  if (!_isInitialized) await init();
 
-    try {
-      await _categoryBox.put(category.id, category);
-      categoriesNotifier.value = [..._categoryBox.values];
-      categoriesNotifier.notifyListeners();
-    } catch (e) {
-      log('Error adding category: $e');
-    }
+  try {
+    await _categoryBox.put(category.id, category);
+    categoriesNotifier.value = [..._categoryBox.values];
+    categoriesNotifier.notifyListeners();
+  } catch (e) {
+    log('Error adding category: $e');
   }
+}
 
-  /// Get All Categories
-  static Future<void> getAllCategories() async {
-    if (!Hive.isBoxOpen(categoryBox)) await init();
+/// Get All Categories
+Future<void> getAllCategories() async {
+  if (!_isInitialized) await init();
 
-    try {
-      categoriesNotifier.value = _categoryBox.values.toList();
-      categoriesNotifier.notifyListeners();
-    } catch (e) {
-      log('Error fetching categories: $e');
-    }
+  try {
+    categoriesNotifier.value = _categoryBox.values.toList();
+    categoriesNotifier.notifyListeners();
+  } catch (e) {
+    log('Error fetching categories: $e');
   }
+}
 
-  /// Update Category
-  static Future<void> updateCategory(
-      String categoryId, Category updatedCategory) async {
-    if (!Hive.isBoxOpen(categoryBox)) await init();
+/// Update Category
+Future<void> updateCategory(String categoryId, Category updatedCategory) async {
+  if (!_isInitialized) await init();
 
-    try {
-      await _categoryBox.put(categoryId, updatedCategory);
-      await getAllCategories(); // Reload the categories list
-    } catch (e) {
-      log('Error updating category: $e');
-    }
+  try {
+    await _categoryBox.put(categoryId, updatedCategory);
+    await getAllCategories(); // Reload the categories list
+  } catch (e) {
+    log('Error updating category: $e');
   }
+}
 
-  static Future<void> deleteCategory(String categoryId) async {
-    if (!Hive.isBoxOpen(categoryBox)) await init();
+/// Delete Category
+Future<void> deleteCategory(String categoryId) async {
+  if (!_isInitialized) await init();
 
-    try {
-      await _categoryBox.delete(categoryId);
-      await getAllCategories();
-    } catch (e) {
-      log('Error deleting category: $e');
-    }
+  try {
+    await _categoryBox.delete(categoryId);
+    await getAllCategories();
+  } catch (e) {
+    log('Error deleting category: $e');
   }
 }

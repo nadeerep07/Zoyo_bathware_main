@@ -76,10 +76,9 @@ class CategoryDialogState extends State<CategoryDialog> {
               );
 
               if (widget.category == null) {
-                CategoryDatabaseHelper.addCategory(newCategory);
+                addCategory(newCategory);
               } else {
-                CategoryDatabaseHelper.updateCategory(
-                    widget.category!.id, newCategory);
+                updateCategory(widget.category!.id, newCategory);
               }
 
               Navigator.pop(context);

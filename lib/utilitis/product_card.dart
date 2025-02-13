@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:zoyo_bathware/database/CrudOperations/cart_db.dart';
+import 'package:zoyo_bathware/database/CrudOperations/data_services.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/navigationSCreens/details_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
@@ -122,7 +124,7 @@ class ProductCard extends StatelessWidget {
                         TextStyle(fontSize: 13, color: Colors.orange.shade800),
                   ),
                   onPressed: () {
-                    // Add to cart functionality
+                    updateQuantity(product, 1);
                   },
                 ),
               ),
@@ -210,7 +212,7 @@ class ProductCard extends StatelessWidget {
             trailing: IconButton(
               icon: Icon(Icons.shopping_cart, color: Colors.orange.shade800),
               onPressed: () {
-                // Add to cart functionality
+                updateQuantity(product, 1);
               },
             ),
           ),

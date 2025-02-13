@@ -22,7 +22,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           _buildNavItem(Icons.home, "Home", 0),
           _buildNavItem(Icons.inventory_2, "Products", 1),
           SizedBox(width: 50), // Space for FAB
-          _buildNavItem(Icons.public, "Imported", 2),
+          _buildNavItem(Icons.cabin, "Cabinets", 2),
           _buildNavItem(Icons.settings, "Manage", 3),
         ],
       ),
