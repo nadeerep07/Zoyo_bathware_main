@@ -5,7 +5,7 @@ import 'package:zoyo_bathware/database/data_perations/category_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
 import 'package:zoyo_bathware/screens/home/home_screen.dart';
-import 'package:zoyo_bathware/screens/Products/all_categories.dart';
+import 'package:zoyo_bathware/screens/all_categories/all_categories.dart';
 import 'package:zoyo_bathware/screens/user_manage/manage_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/product_card.dart';

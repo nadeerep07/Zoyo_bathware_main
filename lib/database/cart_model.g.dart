@@ -20,7 +20,7 @@ class CartAdapter extends TypeAdapter<Cart> {
       cartId: fields[0] as String,
       productId: fields[1] as String,
       quantity: fields[2] as int,
-      addedAt: DateTime.fromMillisecondsSinceEpoch(fields[3] as int),
+      addedAt: fields[3] as DateTime,
     );
   }
 
@@ -35,7 +35,7 @@ class CartAdapter extends TypeAdapter<Cart> {
       ..writeByte(2)
       ..write(obj.quantity)
       ..writeByte(3)
-      ..write(obj.addedAt.millisecondsSinceEpoch);
+      ..write(obj.addedAt);
   }
 
   @override

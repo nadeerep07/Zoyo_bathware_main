@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:zoyo_bathware/database/data_perations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 
 const String productBox = 'products';
@@ -10,6 +11,10 @@ Future<void> addProduct(Product product) async {
   await box.put(product.id, product);
   getAllProducts();
   productsNotifier.notifyListeners();
+
+  // Notify cart about change
+  cartNotifier.value.add(product);
+  cartNotifier.notifyListeners();
 }
 
 Future<void> updateProduct(String productId, Product updatedProduct) async {
@@ -17,6 +22,9 @@ Future<void> updateProduct(String productId, Product updatedProduct) async {
   await box.put(productId, updatedProduct);
   getAllProducts();
   productsNotifier.notifyListeners();
+
+  // Refresh cart and notify listeners
+  cartNotifier.notifyListeners();
 }
 
 Future<void> getAllProducts() async {

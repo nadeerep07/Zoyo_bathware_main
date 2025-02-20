@@ -16,9 +16,10 @@ class Cart {
   @HiveField(3)
   DateTime addedAt;
 
-  Cart(
-      {required this.cartId,
-      required this.productId,
-      required this.quantity,
-      required this.addedAt});
+  Cart({
+    required this.cartId,
+    required this.productId,
+    required this.quantity,
+    required this.addedAt,
+  });
 }

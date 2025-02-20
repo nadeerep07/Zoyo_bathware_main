@@ -1,15 +1,18 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zoyo_bathware/database/category_model.dart';
 import 'package:zoyo_bathware/database/data_perations/category_db.dart';
 import 'package:zoyo_bathware/database/data_perations/product_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/screens/user_manage/add_edit/product%20section/product_controllers.dart';
+import 'package:zoyo_bathware/screens/user_manage/add_edit/product section/product_controllers.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/unique_id.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
-import 'package:zoyo_bathware/utilitis/widgets/text_form_field.dart';
+import 'package:zoyo_bathware/utilitis/widgets/category_section.dart';
+import 'package:zoyo_bathware/utilitis/widgets/description.dart';
+import 'package:zoyo_bathware/utilitis/widgets/image_picker.dart';
+import 'package:zoyo_bathware/utilitis/widgets/price_section.dart';
+import 'package:zoyo_bathware/utilitis/widgets/product_details_section.dart';
+import 'package:zoyo_bathware/utilitis/widgets/save_button.dart';
 
 class ProductAddEdit extends StatefulWidget {
   final bool isEditing;
@@ -64,6 +67,7 @@ class _ProductAddEditState extends State<ProductAddEdit> {
 
     final product = _createProduct();
     await _saveProduct(product);
+
     _showSnackBar(widget.isEditing ? 'Product updated!' : 'Product added!');
     Navigator.pop(context);
   }
@@ -118,22 +122,34 @@ class _ProductAddEditState extends State<ProductAddEdit> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildSectionTitle("Product Images"),
-                _buildImagePicker(),
-                _buildImageGrid(),
+                ImagePickerSection(
+                  selectedImages: _selectedImages,
+                  onPickImage: _pickImage,
+                  onRemoveImage: _removeImage,
+                ),
                 const SizedBox(height: 20),
                 _buildSectionTitle("Product Details"),
-                _buildProductDetailsSection(),
+                ProductDetailsSection(controllers: _controllers),
                 const SizedBox(height: 20),
                 _buildSectionTitle("Category"),
-                _buildCategorySection(),
+                CategorySection(
+                  categories: categoriesNotifier
+                      .value, // Adjust this based on your provider's structure.
+                  selectedCategory: _selectedCategory,
+                  onChanged: (value) =>
+                      setState(() => _selectedCategory = value),
+                ),
                 const SizedBox(height: 20),
                 _buildSectionTitle("Price"),
-                _buildPriceSection(),
+                PriceSection(controllers: _controllers),
                 const SizedBox(height: 20),
                 _buildSectionTitle("Description"),
-                _buildDescriptionSection(),
+                DescriptionSection(controllers: _controllers),
                 const SizedBox(height: 20),
-                _buildSaveButton(),
+                SaveButton(
+                  onPressed: _saveOrUpdateProduct,
+                  label: widget.isEditing ? "Update Product" : "Save Product",
+                ),
               ],
             ),
           ),
@@ -160,193 +176,6 @@ class _ProductAddEditState extends State<ProductAddEdit> {
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: AppColors.primaryColor,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImagePicker() {
-    return InkWell(
-      onTap: _pickImage,
-      child: Container(
-        height: 120,
-        width: 120,
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.primaryColor, width: 2),
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
-        ),
-        child: _selectedImages.isNotEmpty
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  File(_selectedImages.first.path),
-                  fit: BoxFit.cover,
-                ),
-              )
-            : const Icon(Icons.add_a_photo, color: AppColors.primaryColor),
-      ),
-    );
-  }
-
-  Widget _buildImageGrid() {
-    if (_selectedImages.isEmpty) return const SizedBox.shrink();
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-        ),
-        itemCount: _selectedImages.length,
-        itemBuilder: (context, index) => Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.file(
-                File(_selectedImages[index].path),
-                fit: BoxFit.cover,
-              ),
-            ),
-            Positioned(
-              top: 4,
-              right: 4,
-              child: GestureDetector(
-                onTap: () => _removeImage(index),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
-                    shape: BoxShape.circle,
-                  ),
-                  padding: const EdgeInsets.all(4),
-                  child: const Icon(
-                    Icons.close,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProductDetailsSection() {
-    return Column(
-      children: [
-        CustomTextField(
-          controller: _controllers.productCode,
-          labelText: 'Product Code',
-          prefixIcon: Icons.code,
-        ),
-        const SizedBox(height: 16),
-        CustomTextField(
-          controller: _controllers.productName,
-          labelText: 'Product Name',
-          prefixIcon: Icons.shopping_bag,
-        ),
-        const SizedBox(height: 16),
-        CustomTextField(
-          controller: _controllers.size,
-          labelText: 'Size',
-        ),
-        const SizedBox(height: 16),
-        CustomTextField(
-          controller: _controllers.type,
-          labelText: 'Type',
-          prefixIcon: Icons.type_specimen,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCategorySection() {
-    return ValueListenableBuilder<List<Category>>(
-      valueListenable: categoriesNotifier,
-      builder: (context, categories, _) {
-        if (categories.isEmpty) return const Text('No categories available');
-
-        return DropdownButtonFormField<String>(
-          value: _selectedCategory,
-          decoration: const InputDecoration(
-            labelText: 'Category',
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          ),
-          items: categories
-              .map((category) => DropdownMenuItem<String>(
-                    value: category.name,
-                    child: Text(category.name),
-                  ))
-              .toList(),
-          onChanged: (value) => setState(() => _selectedCategory = value),
-          validator: (value) => value == null || value.isEmpty
-              ? 'Please select a category'
-              : null,
-        );
-      },
-    );
-  }
-
-  Widget _buildPriceSection() {
-    return Column(
-      children: [
-        CustomTextField(
-          controller: _controllers.quantity,
-          labelText: 'Quantity',
-          prefixIcon: Icons.production_quantity_limits,
-          isNumeric: true,
-        ),
-        const SizedBox(height: 16),
-        CustomTextField(
-          controller: _controllers.purchaseRate,
-          labelText: 'Purchase Rate',
-          isNumeric: true,
-        ),
-        const SizedBox(height: 16),
-        CustomTextField(
-          controller: _controllers.salesRate,
-          labelText: 'Sales Rate',
-          isNumeric: true,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDescriptionSection() {
-    return CustomTextField(
-      controller: _controllers.description,
-      labelText: 'Description',
-      prefixIcon: Icons.description,
-      maxLines: 3,
-    );
-  }
-
-  Widget _buildSaveButton() {
-    return Center(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 40,
-            vertical: 16,
-          ),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-        onPressed: _saveOrUpdateProduct,
-        child: Text(
-          widget.isEditing ? "Update Product" : "Save Product",
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
         ),
       ),
     );

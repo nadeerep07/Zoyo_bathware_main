@@ -10,7 +10,7 @@ import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
 import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
 
-import '../Products/all_categories.dart';
+import '../all_categories/all_categories.dart';
 
 class ManageScreen extends StatefulWidget {
   const ManageScreen({super.key});

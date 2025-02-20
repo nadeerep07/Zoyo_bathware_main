@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/navigationSCreens/details_screen.dart';
+import 'package:zoyo_bathware/navigation_screens/details_screen.dart';
+import 'package:zoyo_bathware/screens/all_categories/all_categories.dart';
 import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
 import 'package:zoyo_bathware/screens/home/search_screen.dart';
-import 'package:zoyo_bathware/screens/Products/all_categories.dart';
 import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
+import 'package:zoyo_bathware/screens/sales_history/invoice_screen.dart';
 import 'package:zoyo_bathware/screens/user_manage/manage_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
@@ -29,12 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final box = await Hive.openBox<Product>('products');
     log('data fetching: ${box.length}');
     final products = box.values.toList();
-    products
-        .sort((a, b) => b.purchaseDate.first.compareTo(a.purchaseDate.first));
+    // Sort by latest purchase date (assumes purchaseDate is a List<DateTime>)
+    products.sort(
+      (a, b) => b.purchaseDate.first.compareTo(a.purchaseDate.first),
+    );
+    // Take first 4 products for the carousel (if you want to show all in grid, adjust accordingly)
     productsNotifier.value = products.take(4).toList();
   }
 
-  List<Product> products = [];
   int _selectedIndex = 0;
 
   @override
@@ -47,30 +50,30 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
-
     switch (index) {
       case 0:
+        // For Home, you might simply pop back to HomeScreen.
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
         break;
       case 1:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => AllCategories()),
+          MaterialPageRoute(builder: (context) => const AllCategories()),
         );
         break;
       case 2:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CabinetScreen()),
+          MaterialPageRoute(builder: (context) => const CabinetScreen()),
         );
         break;
       case 3:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ManageScreen()),
+          MaterialPageRoute(builder: (context) => const ManageScreen()),
         );
         break;
       default:
@@ -78,22 +81,74 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Drawer navigation for screens not in bottom navigation.
+  Widget _buildDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          // Drawer header
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: AppColors.primaryColor,
+            ),
+            child: Center(
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.receipt_long),
+            title: const Text('Invoices'),
+            onTap: () {
+              Navigator.pop(context); // Close drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const InvoicesScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Billing'),
+            onTap: () {
+              Navigator.pop(context); // Close drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const BillingScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
+      drawer: _buildDrawer(),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(screenHeight * 0.15),
         child: AppBar(
           backgroundColor: AppColors.backgroundColor,
           foregroundColor: AppColors.primaryColor,
-          leading: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.view_list,
-              size: screenWidth * 0.08,
+          leading: Builder(
+            builder: (context) => IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Icon(
+                Icons.menu,
+                size: screenWidth * 0.08,
+              ),
             ),
           ),
           centerTitle: true,
@@ -110,8 +165,10 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SearchScreen()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchScreen()));
               },
               icon: Icon(
                 Icons.search,
@@ -129,6 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.all(screenWidth * 0.04),
         child: Column(
           children: [
+            // Carousel Slider at the top
             Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
@@ -146,6 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SizedBox(height: screenHeight * 0.03),
+            // New Arrivals Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -159,10 +218,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextButton(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AllCategories(),
-                        ));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AllCategories()),
+                    );
                   },
                   child: Text(
                     'View All',
@@ -175,6 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             SizedBox(height: screenHeight * 0.02),
+            // New Arrivals Carousel
             SizedBox(
               height: screenHeight * 0.25,
               child: ValueListenableBuilder<List<Product>>(
@@ -192,11 +252,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ProductDetailScreen(
-                                                productCode: product.id!)));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductDetailScreen(
+                                        productCode: product.id!),
+                                  ),
+                                );
                               },
                               child: SizedBox(
                                 width: screenWidth * 0.6,
@@ -257,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Text(
                                                 'ZRP: ₹${product.salesRate.toStringAsFixed(2)}',
                                                 style: TextStyle(
-                                                  fontSize: screenWidth * 0.040,
+                                                  fontSize: screenWidth * 0.04,
                                                   fontWeight: FontWeight.w600,
                                                   color:
                                                       AppColors.secondaryColor,
@@ -296,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(builder: (context) => BillingScreen()));
         },
         backgroundColor: Colors.blue,
-        child: Icon(Icons.shopping_cart, color: Colors.white),
+        child: const Icon(Icons.shopping_cart, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: CustomBottomNavigationBar(

@@ -18,8 +18,8 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Product> _filteredProducts = [];
   List<String> _categories = ['All Categories'];
   String selectedCategory = 'All Categories';
-  double _minPrice = 0;
-  double _maxPrice = 25000;
+  final double _minPrice = 0;
+  final double _maxPrice = 40000;
   bool showOutOfStock = true;
   int _selectedSortOption = 0;
 
@@ -191,23 +191,94 @@ class _SearchScreenState extends State<SearchScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return ListView.builder(
-          itemCount: _categories.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(_categories[index]),
-              onTap: () {
-                setState(() {
-                  selectedCategory = _categories[index];
-                  _filterProducts(_searchController.text);
-                });
-                Navigator.pop(context);
-              },
-            );
-          },
+        int totalProductCount = _getTotalProductCount();
+
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Total Products: $totalProductCount',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _categories.length,
+                  itemBuilder: (context, index) {
+                    String category = _categories[index];
+
+                    int productCount = _getProductCountForCategory(category);
+
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedCategory = category;
+                          _filterProducts(_searchController.text);
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
+                        margin: const EdgeInsets.symmetric(vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          border:
+                              Border.all(color: Colors.grey.shade300, width: 1),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              category,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            // product counts
+                            Text(
+                              '($productCount)',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
+  }
+
+  int _getProductCountForCategory(String category) {
+    return productsNotifier.value
+        .where((product) => product.category == category)
+        .length;
+  }
+
+  int _getTotalProductCount() {
+    return productsNotifier.value.length;
   }
 
   @override

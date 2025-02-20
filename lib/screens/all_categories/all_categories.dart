@@ -19,48 +19,48 @@ class AllCategories extends StatefulWidget {
 
 class _AllCategoriesState extends State<AllCategories> {
   int _selectedIndex = 1;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    switch (index) {
-      case 0:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AllCategories()),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CabinetScreen()),
-        );
-        break;
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ManageScreen()),
-        );
-        break;
-      default:
-        break;
-    }
-  }
-
   bool isGridView = true;
 
   @override
   void initState() {
     super.initState();
+    // Load categories from Hive.
     getAllCategories();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    // Navigate based on bottom navigation index.
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AllCategories()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CabinetScreen()),
+        );
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ManageScreen()),
+        );
+        break;
+      default:
+        break;
+    }
   }
 
   @override
@@ -102,6 +102,7 @@ class _AllCategoriesState extends State<AllCategories> {
               child: ValueListenableBuilder<List<Category>>(
                 valueListenable: categoriesNotifier,
                 builder: (context, categories, child) {
+                  // Filter out any category with name 'cabinet'
                   final filteredCategories = categories
                       .where((category) =>
                           category.name.toLowerCase().trim() != 'cabinet')
@@ -110,7 +111,6 @@ class _AllCategoriesState extends State<AllCategories> {
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.category_outlined,
@@ -131,7 +131,7 @@ class _AllCategoriesState extends State<AllCategories> {
                       ),
                     );
                   }
-
+                  // Show grid view if isGridView is true; otherwise list view.
                   return isGridView
                       ? LayoutBuilder(
                           builder: (context, constraints) {
@@ -150,7 +150,7 @@ class _AllCategoriesState extends State<AllCategories> {
                                 final category = filteredCategories[index];
                                 return CategoryCard(
                                   category: category,
-                                  isGridView: isGridView, // Pass the view mode
+                                  isGridView: isGridView,
                                 );
                               },
                             );
@@ -162,7 +162,7 @@ class _AllCategoriesState extends State<AllCategories> {
                             final category = filteredCategories[index];
                             return CategoryCard(
                               category: category,
-                              isGridView: isGridView, // Pass the view mode
+                              isGridView: isGridView,
                             );
                           },
                         );
@@ -178,7 +178,7 @@ class _AllCategoriesState extends State<AllCategories> {
               MaterialPageRoute(builder: (context) => BillingScreen()));
         },
         backgroundColor: Colors.blue,
-        child: Icon(Icons.shopping_cart, color: Colors.white),
+        child: const Icon(Icons.shopping_cart, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: CustomBottomNavigationBar(
