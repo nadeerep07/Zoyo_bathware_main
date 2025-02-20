@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/screens/Home/home_screen.dart';
+import 'package:zoyo_bathware/screens/home/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/database/CrudOperations/category_db.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
+import 'package:zoyo_bathware/database/data_perations/category_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
+import 'package:zoyo_bathware/screens/home/home_screen.dart';
+import 'package:zoyo_bathware/screens/Products/all_categories.dart';
+import 'package:zoyo_bathware/screens/user_manage/manage_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/product_card.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
+import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
 
 class CabinetScreen extends StatefulWidget {
   const CabinetScreen({
@@ -17,6 +22,43 @@ class CabinetScreen extends StatefulWidget {
 }
 
 class _CabinetScreenState extends State<CabinetScreen> {
+  int _selectedIndex = 2; // Set Manage as the selected tab
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllCategories()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CabinetScreen()),
+        );
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ManageScreen()),
+        );
+        break;
+      default:
+        break;
+    }
+  }
+
   List<Product> filteredProducts = [];
   ValueNotifier<bool> isGridView = ValueNotifier<bool>(true);
 
@@ -121,6 +163,19 @@ class _CabinetScreenState extends State<CabinetScreen> {
                         );
                 },
               ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BillingScreen()));
+        },
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.shopping_cart, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

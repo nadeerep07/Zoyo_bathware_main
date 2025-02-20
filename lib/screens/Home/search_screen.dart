@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/CrudOperations/category_db.dart';
+import 'package:zoyo_bathware/database/data_perations/category_db.dart';
+import 'package:zoyo_bathware/database/data_perations/product_db.dart';
 import 'package:zoyo_bathware/utilitis/product_card.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/database/CrudOperations/data_services.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/database/category_model.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -17,255 +16,197 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<Product> _filteredProducts = [];
-
-  // New Filter Variables
+  List<String> _categories = ['All Categories'];
   String selectedCategory = 'All Categories';
   double _minPrice = 0;
-  double _maxPrice = 25000; // Set default max price as per your data
+  double _maxPrice = 25000;
   bool showOutOfStock = true;
-
-  // Flag to show/hide filters
-  bool showFilters = false;
+  int _selectedSortOption = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getAllProducts(); // Fetch products after the first frame
-      getAllCategories(); // Fetch categories on init
+      getAllProducts();
+      getAllCategory();
     });
   }
 
   void _filterProducts(String query) {
+    List<Product> filteredList = productsNotifier.value.where((product) {
+      final nameLower = product.productName.toLowerCase();
+      final codeLower = product.productCode.toLowerCase();
+      final searchLower = query.toLowerCase();
+
+      bool matchesSearch =
+          nameLower.contains(searchLower) || codeLower.contains(searchLower);
+      bool matchesCategory = selectedCategory == 'All Categories' ||
+          product.category == selectedCategory;
+      bool matchesPrice =
+          product.salesRate >= _minPrice && product.salesRate <= _maxPrice;
+      bool matchesStock = !showOutOfStock || product.quantity > 0;
+
+      return matchesSearch && matchesCategory && matchesPrice && matchesStock;
+    }).toList();
+
     setState(() {
-      _filteredProducts = productsNotifier.value.where((product) {
-        final nameLower = product.productName.toLowerCase();
-        final codeLower = product.productCode.toLowerCase();
-        final searchLower = query.toLowerCase();
-
-        bool matchesSearch =
-            nameLower.contains(searchLower) || codeLower.contains(searchLower);
-
-        bool matchesCategory = selectedCategory == 'All Categories' ||
-            product.category == selectedCategory;
-
-        bool matchesPrice =
-            product.salesRate >= _minPrice && product.salesRate <= _maxPrice;
-
-        bool matchesStock = !showOutOfStock || product.quantity > 0;
-
-        return matchesSearch && matchesCategory && matchesPrice && matchesStock;
-      }).toList();
+      _filteredProducts = filteredList;
+      _sortProducts();
     });
   }
 
+  void _sortProducts() {
+    List<Product> sortedProducts = List.from(_filteredProducts);
+    switch (_selectedSortOption) {
+      case 0:
+        sortedProducts.sort((a, b) => a.productName.compareTo(b.productName));
+        break;
+      case 1:
+        sortedProducts.sort((a, b) => a.salesRate.compareTo(b.salesRate));
+        break;
+      case 2:
+        sortedProducts.sort((a, b) => b.salesRate.compareTo(a.salesRate));
+        break;
+    }
+    setState(() {
+      _filteredProducts = sortedProducts;
+    });
+  }
+
+  Future<void> getAllCategory() async {
+    await getAllCategories();
+    if (categoriesNotifier.value.isNotEmpty) {
+      setState(() {
+        _categories = [
+          'All Categories',
+          ...categoriesNotifier.value.map((e) => e.name)
+        ];
+      });
+    }
+  }
+
+// screen...................................................
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: backButton(context),
-        title: const Text(
-          "Search",
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.primaryColor,
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() {
-                showFilters = !showFilters; // Toggle filter visibility
-              });
-            },
-            child: Text(
-              "Sort Product",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: TextField(
-                controller: _searchController,
-                onChanged: _filterProducts,
-                decoration: const InputDecoration(
-                  hintText: "Search for Products",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.search, color: Colors.grey),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 16),
-                ),
-              ),
-            ),
-          ),
-
-          // Show Filters only if showFilters is true
-          if (showFilters)
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  // Category Filter
-                  ValueListenableBuilder<List<Category>>(
-                    valueListenable: categoriesNotifier,
-                    builder: (context, categories, _) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: DropdownButton<String>(
-                          value: selectedCategory,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedCategory = newValue!;
-                              _filterProducts(_searchController.text);
-                            });
-                          },
-                          isExpanded: true,
-                          underline: Container(),
-                          icon: const Icon(Icons.arrow_drop_down,
-                              color: Colors.black),
-                          items: [
-                                'All Categories'
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList() +
-                              categories
-                                  .map<DropdownMenuItem<String>>((category) {
-                                return DropdownMenuItem<String>(
-                                  value: category.name,
-                                  child: Text(category.name),
-                                );
-                              }).toList(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Price Range Filter
-                  Column(
-                    children: [
-                      const Text(
-                        'Price Range',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600),
-                      ),
-                      RangeSlider(
-                        values: RangeValues(_minPrice, _maxPrice),
-                        min: 0,
-                        max: 25000,
-                        divisions: 10,
-                        labels: RangeLabels('₹$_minPrice', '₹$_maxPrice'),
-                        onChanged: (RangeValues values) {
-                          setState(() {
-                            _minPrice = values.start;
-                            _maxPrice = values.end;
-                            _filterProducts(_searchController.text);
-                          });
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('₹${_minPrice.toInt()}'),
-                          Text('₹${_maxPrice.toInt()}'),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Out of Stock Filter
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Show Out of Stock",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      Switch(
-                        value: showOutOfStock,
-                        onChanged: (bool value) {
-                          setState(() {
-                            showOutOfStock = value;
-                            _filterProducts(_searchController.text);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          Expanded(
-            child: ValueListenableBuilder<List<Product>>(
-              valueListenable: productsNotifier,
-              builder: (context, products, _) {
-                final displayedProducts = _searchController.text.isEmpty
-                    ? products
-                    : _filteredProducts;
-
-                if (displayedProducts.isEmpty) {
-                  return const Center(
-                    child: Text("No products found"),
-                  );
-                }
-
-                return GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.6,
-                    crossAxisSpacing: 0.5,
-                    mainAxisSpacing: 0.5,
-                  ),
-                  itemCount: displayedProducts.length,
-                  itemBuilder: (context, index) {
-                    final product = displayedProducts[index];
-                    return ProductCard(
-                      isGridView: true,
-                      product: product,
-                    );
-                  },
-                );
-              },
-            ),
-          ),
+          _buildSearchBar(),
+          Expanded(child: _buildProductGrid()),
         ],
       ),
+      bottomNavigationBar: ColoredBox(
+          color: AppColors.primaryColor, child: _buildBottomNavigationBar()),
+    );
+  }
+  // ..................................................................
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      leading: backButton(context),
+      title: const Text("Search",
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+      centerTitle: true,
+      backgroundColor: AppColors.primaryColor,
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: TextField(
+        controller: _searchController,
+        onChanged: _filterProducts,
+        decoration: InputDecoration(
+          hintText: "Search for Products",
+          prefixIcon: const Icon(Icons.search),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+          filled: true,
+          fillColor: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductGrid() {
+    final displayedProducts =
+        _filteredProducts.isNotEmpty || _searchController.text.isNotEmpty
+            ? _filteredProducts
+            : productsNotifier.value;
+
+    if (displayedProducts.isEmpty) {
+      return const Center(child: Text("No products found"));
+    }
+
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.6,
+      ),
+      itemCount: displayedProducts.length,
+      itemBuilder: (context, index) {
+        return ProductCard(isGridView: true, product: displayedProducts[index]);
+      },
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      selectedItemColor: AppColors.primaryColor,
+      unselectedItemColor: Colors.grey,
+      currentIndex: _selectedSortOption,
+      onTap: (index) {
+        setState(() {
+          if (index < 3) {
+            _selectedSortOption = index;
+            _sortProducts();
+          } else if (index == 3) {
+            showOutOfStock = !showOutOfStock;
+            _filterProducts(_searchController.text);
+          } else if (index == 4) {
+            _showCategorySelection();
+          }
+        });
+      },
+      items: [
+        const BottomNavigationBarItem(
+            icon: Icon(Icons.sort_by_alpha), label: "Name"),
+        const BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_upward), label: "Price Low"),
+        const BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_downward), label: "Price High"),
+        BottomNavigationBarItem(
+            icon:
+                Icon(showOutOfStock ? Icons.visibility : Icons.visibility_off),
+            label: "Stock"),
+        const BottomNavigationBarItem(
+            icon: Icon(Icons.category), label: "Category"),
+      ],
+    );
+  }
+
+  void _showCategorySelection() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView.builder(
+          itemCount: _categories.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(_categories[index]),
+              onTap: () {
+                setState(() {
+                  selectedCategory = _categories[index];
+                  _filterProducts(_searchController.text);
+                });
+                Navigator.pop(context);
+              },
+            );
+          },
+        );
+      },
     );
   }
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/CrudOperations/category_db.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
+import 'package:zoyo_bathware/database/data_perations/category_db.dart';
 import 'package:zoyo_bathware/utilitis/image_picker.dart';
 
 class CategoryDialog extends StatefulWidget {

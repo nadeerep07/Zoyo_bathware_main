@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/database/CrudOperations/data_services.dart';
+import 'package:zoyo_bathware/database/data_perations/product_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:intl/intl.dart' as intl;
@@ -21,7 +21,7 @@ class _PurchaseProductScreenState extends State<PurchaseProductScreen> {
   int purchaseQuantity = 1;
   double purchaseRate = 0.0;
   double saleRate = 0.0;
-  DateTime purchaseDate = DateTime.now(); // Variable to store the purchase date
+  DateTime purchaseDate = DateTime.now();
 
   @override
   void initState() {
@@ -40,6 +40,7 @@ class _PurchaseProductScreenState extends State<PurchaseProductScreen> {
       selectedProduct!.quantity += purchaseQuantity;
       selectedProduct!.purchaseRate = purchaseRate;
       selectedProduct!.salesRate = saleRate;
+      selectedProduct!.purchaseDate.add(purchaseDate);
 
       await updateProduct(selectedProduct!.id!, selectedProduct!);
 

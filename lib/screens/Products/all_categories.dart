@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/CrudOperations/category_db.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
+import 'package:zoyo_bathware/database/data_perations/category_db.dart';
+import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
+import 'package:zoyo_bathware/screens/home/home_screen.dart';
+import 'package:zoyo_bathware/screens/user_manage/manage_screen.dart';
+import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
+import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
 import 'package:zoyo_bathware/utilitis/widgets/category_card.dart';
 
 class AllCategories extends StatefulWidget {
@@ -13,6 +18,43 @@ class AllCategories extends StatefulWidget {
 }
 
 class _AllCategoriesState extends State<AllCategories> {
+  int _selectedIndex = 1;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllCategories()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CabinetScreen()),
+        );
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ManageScreen()),
+        );
+        break;
+      default:
+        break;
+    }
+  }
+
   bool isGridView = true;
 
   @override
@@ -129,6 +171,19 @@ class _AllCategoriesState extends State<AllCategories> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BillingScreen()));
+        },
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.shopping_cart, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

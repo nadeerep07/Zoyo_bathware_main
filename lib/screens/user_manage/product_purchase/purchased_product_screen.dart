@@ -47,13 +47,14 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
         valueListenable: Hive.box<Product>(productBox).listenable(),
         builder: (context, Box<Product> box, _) {
           List<Product> allProducts = box.values.toList();
-
           List<Product> purchasedProducts = allProducts
-              .where((product) => product.createdAt != null)
+              .where((product) => product.purchaseDate.isNotEmpty)
               .where((product) =>
                   _selectedDate == null ||
-                  DateFormat('yyyy-MM-dd').format(product.createdAt!) ==
-                      DateFormat('yyyy-MM-dd').format(_selectedDate!))
+                  product.purchaseDate.any((date) =>
+                      DateFormat('yyyy-MM-dd').format(date) ==
+                      DateFormat('yyyy-MM-dd')
+                          .format(_selectedDate ?? DateTime.now())))
               .toList();
 
           if (purchasedProducts.isEmpty) {
@@ -113,7 +114,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
                                   style: const TextStyle(
                                       fontSize: 14, color: Colors.black54)),
                               Text(
-                                  'Purchase Date: ${DateFormat('yyyy-MM-dd').format(product.createdAt!)}',
+                                  'Purchase Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate ?? DateTime.now())}',
                                   style: const TextStyle(
                                       fontSize: 12, color: Colors.black45)),
                             ],

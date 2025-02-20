@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:zoyo_bathware/database/CrudOperations/cart_db.dart';
-import 'package:zoyo_bathware/database/cart_model.dart';
+import 'package:zoyo_bathware/database/data_perations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/utilitis/custom_classes/detail_row.dart';
 
 const String productBox = 'products';
 
@@ -105,11 +105,12 @@ class ProductDetailScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              _detailRow('Code', product.productCode),
-              _detailRow('Material', product.type),
-              _detailRow('Dimensions', product.size),
-              _detailRow('Availability', product.quantity.toString()),
-              _detailRow('Manufacturer', 'Zoyo Bathware'),
+              detail_row(label: 'Code', value: product.productCode),
+              detail_row(label: 'Material', value: product.type),
+              detail_row(label: 'Dimensions', value: product.size),
+              detail_row(
+                  label: 'Availability', value: product.quantity.toString()),
+              detail_row(label: 'Manufacturer', value: 'Zoyo Bathware'),
               const SizedBox(height: 20),
 
               // Product Description
@@ -152,21 +153,6 @@ class ProductDetailScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _detailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
-          Text(value,
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-        ],
       ),
     );
   }

@@ -7,11 +7,10 @@ const String categoryBox = 'categories';
 late Box<Category> _categoryBox;
 
 final ValueNotifier<List<Category>> categoriesNotifier = ValueNotifier([]);
-bool _isInitialized = false; // Track initialization status
+bool _isInitialized = false;
 
-/// Initialize Hive Boxes
 Future<void> init() async {
-  if (_isInitialized) return; // If already initialized, do nothing
+  if (_isInitialized) return;
 
   try {
     if (!Hive.isBoxOpen(categoryBox)) {
@@ -19,7 +18,7 @@ Future<void> init() async {
     } else {
       _categoryBox = Hive.box<Category>(categoryBox);
     }
-    _isInitialized = true; // Mark as initialized
+    _isInitialized = true;
     await getAllCategories();
   } catch (e) {
     log('Error initializing boxes: $e');
@@ -57,7 +56,7 @@ Future<void> updateCategory(String categoryId, Category updatedCategory) async {
 
   try {
     await _categoryBox.put(categoryId, updatedCategory);
-    await getAllCategories(); // Reload the categories list
+    await getAllCategories();
   } catch (e) {
     log('Error updating category: $e');
   }

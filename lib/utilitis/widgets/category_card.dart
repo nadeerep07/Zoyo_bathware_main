@@ -6,7 +6,7 @@ import 'package:zoyo_bathware/database/category_model.dart';
 
 class CategoryCard extends StatelessWidget {
   final Category category;
-  final bool isGridView; // New parameter to track the view mode
+  final bool isGridView;
 
   const CategoryCard(
       {super.key, required this.category, required this.isGridView});
@@ -15,7 +15,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to CategoryToAllProduct and pass the selected category
+        // selct cheytha category ille product screeenk pass cheyyum
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -31,7 +31,6 @@ class CategoryCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: isGridView
-              // Layout for GridView
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -58,7 +57,6 @@ class CategoryCard extends StatelessWidget {
                     ),
                   ],
                 )
-              // Layout for ListView
               : Row(
                   children: [
                     if (category.imagePath.isNotEmpty)

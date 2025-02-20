@@ -28,7 +28,7 @@ class ProductAdapter extends TypeAdapter<Product> {
       category: fields[8] as String,
       imagePaths: (fields[9] as List).cast<String>(),
       id: fields[10] as String?,
-      createdAt: fields[11] as DateTime?,
+      purchaseDate: (fields[11] as List).cast<DateTime>(),
     );
   }
 
@@ -59,7 +59,7 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(10)
       ..write(obj.id)
       ..writeByte(11)
-      ..write(obj.createdAt);
+      ..write(obj.purchaseDate);
   }
 
   @override

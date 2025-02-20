@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zoyo_bathware/database/CrudOperations/category_db.dart';
-import 'package:zoyo_bathware/database/CrudOperations/data_services.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
+import 'package:zoyo_bathware/database/data_perations/category_db.dart';
+import 'package:zoyo_bathware/database/data_perations/product_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/screens/User%20manage/Add%20And%20Edit/Product%20section/product_controllers.dart';
+import 'package:zoyo_bathware/screens/user_manage/add_edit/product%20section/product_controllers.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/unique_id.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
@@ -81,7 +81,7 @@ class _ProductAddEditState extends State<ProductAddEdit> {
       description: _controllers.description.text,
       category: _selectedCategory!,
       imagePaths: _selectedImages.map((file) => file.path).toList(),
-      createdAt: DateTime.now(),
+      purchaseDate: [DateTime.now()],
     );
   }
 

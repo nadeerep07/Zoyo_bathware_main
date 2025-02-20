@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/CrudOperations/cart_db.dart';
-import 'package:zoyo_bathware/database/CrudOperations/data_services.dart';
+import 'package:zoyo_bathware/database/data_perations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/navigationSCreens/details_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
@@ -25,7 +23,6 @@ class ProductCard extends StatelessWidget {
     if (isGridView) {
       return GestureDetector(
         onTap: () {
-          // Navigate to detail screen
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -135,7 +132,6 @@ class ProductCard extends StatelessWidget {
     } else {
       return GestureDetector(
         onTap: () {
-          // Navigate to detail screen
           Navigator.push(
             context,
             MaterialPageRoute(

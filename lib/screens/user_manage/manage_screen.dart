@@ -1,16 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/screens/User%20manage/NavigatingScreens/added_product_screen.dart';
-import 'package:zoyo_bathware/screens/User%20manage/Add%20And%20Edit/Product%20section/product_add_edit.dart';
-import 'package:zoyo_bathware/screens/User%20manage/Add%20And%20Edit/category%20section/category_screen.dart';
-import 'package:zoyo_bathware/screens/User%20manage/Product_purchase/purchase_screen.dart';
-import 'package:zoyo_bathware/screens/User%20manage/Product_purchase/purchased_product_screen.dart';
+import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
+import 'package:zoyo_bathware/screens/home/home_screen.dart';
+import 'package:zoyo_bathware/screens/user_manage/add_edit/category%20section/category_screen.dart';
+import 'package:zoyo_bathware/screens/user_manage/manage_screen_navigation/added_product_screen.dart';
+import 'package:zoyo_bathware/screens/user_manage/product_purchase/purchase_screen.dart';
+import 'package:zoyo_bathware/screens/user_manage/product_purchase/purchased_product_screen.dart';
+import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
+import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
 
-class ManageScreen extends StatelessWidget {
+import '../Products/all_categories.dart';
+
+class ManageScreen extends StatefulWidget {
   const ManageScreen({super.key});
 
-  // Function to build manage options
+  @override
+  State<ManageScreen> createState() => _ManageScreenState();
+}
+
+class _ManageScreenState extends State<ManageScreen> {
+  int _selectedIndex = 3; // Set Manage as the selected tab
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllCategories()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CabinetScreen()),
+        );
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ManageScreen()),
+        );
+        break;
+      default:
+        break;
+    }
+  }
+
+  // widget building card
   Widget _buildManageItem(
       BuildContext context, IconData icon, String title, Widget targetScreen) {
     return Card(
@@ -24,7 +71,7 @@ class ManageScreen extends StatelessWidget {
         trailing:
             Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black54),
         onTap: () {
-          // Navigate to the respective screen
+          // navigating to clicking screen
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => targetScreen),
@@ -34,7 +81,7 @@ class ManageScreen extends StatelessWidget {
     );
   }
 
-  // Function to build sales summary columns
+  // Sales card
   Widget _buildSalesColumn(String title, String amount) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +126,7 @@ class ManageScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            // Manage Options List
+
             _buildManageItem(
                 context, Icons.category, " Category", CategoryScreen()),
             _buildManageItem(
@@ -93,6 +140,19 @@ class ManageScreen extends StatelessWidget {
             //     context, Icons.settings, "Settings", Settings()), // Optional
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BillingScreen()));
+        },
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.shopping_cart, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

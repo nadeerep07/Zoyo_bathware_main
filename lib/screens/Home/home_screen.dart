@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/database/category_model.dart';
 import 'package:zoyo_bathware/navigationSCreens/details_screen.dart';
-import 'package:zoyo_bathware/screens/Cart%20Section/CArt_screen.dart';
-import 'package:zoyo_bathware/screens/Home/search_screen.dart';
+import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
+import 'package:zoyo_bathware/screens/home/search_screen.dart';
 import 'package:zoyo_bathware/screens/Products/all_categories.dart';
-import 'package:zoyo_bathware/screens/User%20manage/manage_screen.dart';
 import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
+import 'package:zoyo_bathware/screens/user_manage/manage_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
@@ -30,11 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final box = await Hive.openBox<Product>('products');
     log('data fetching: ${box.length}');
     final products = box.values.toList();
-    products.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+    products
+        .sort((a, b) => b.purchaseDate.first.compareTo(a.purchaseDate.first));
     productsNotifier.value = products.take(4).toList();
-    /**
-    * *change the number product to show in new arrivals .............................
-    */
   }
 
   List<Product> products = [];
@@ -83,9 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(120),
+        preferredSize: Size.fromHeight(screenHeight * 0.15),
         child: AppBar(
           backgroundColor: AppColors.backgroundColor,
           foregroundColor: AppColors.primaryColor,
@@ -93,17 +93,17 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {},
             icon: Icon(
               Icons.view_list,
-              size: 32,
+              size: screenWidth * 0.08,
             ),
           ),
           centerTitle: true,
           flexibleSpace: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 40),
+              SizedBox(height: screenHeight * 0.05),
               Image.asset(
                 'assets/images/Screenshot 2025-02-03 at 8.38.37 PM.png',
-                height: 100,
+                height: screenHeight * 0.1,
               ),
             ],
           ),
@@ -115,10 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               icon: Icon(
                 Icons.search,
-                size: 32,
+                size: screenWidth * 0.08,
               ),
             ),
-            SizedBox(width: 16),
+            SizedBox(width: screenWidth * 0.04),
           ],
         ),
       ),
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
         color: AppColors.backgroundColor,
         width: double.infinity,
         height: double.infinity,
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(screenWidth * 0.04),
         child: Column(
           children: [
             Card(
@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Padding(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(screenWidth * 0.02),
                 child: CustomCarouselSlider(
                   imagePaths: [
                     'assets/images/WhatsApp Image 2025-01-27 at 15.39.44 (1).jpeg',
@@ -145,13 +145,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: screenHeight * 0.03),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'New Arrivals',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.06,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
@@ -163,14 +166,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: Text(
                     'View All',
-                    style: TextStyle(color: AppColors.buttonColor),
+                    style: TextStyle(
+                      color: AppColors.buttonColor,
+                      fontSize: screenWidth * 0.05,
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.02),
             SizedBox(
-              height: 200,
+              height: screenHeight * 0.25,
               child: ValueListenableBuilder<List<Product>>(
                 valueListenable: productsNotifier,
                 builder: (context, products, child) {
@@ -193,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 productCode: product.id!)));
                               },
                               child: SizedBox(
-                                width: 250,
+                                width: screenWidth * 0.6,
                                 child: Card(
                                   elevation: 6,
                                   shape: RoundedRectangleBorder(
@@ -206,10 +212,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Image.file(
                                           File(product.imagePaths.first),
                                           fit: BoxFit.cover,
-                                          height: 150,
+                                          height: screenHeight * 0.2,
                                           width: double.infinity,
                                         ),
-                                        // Gradient overlay for better text visibility
                                         Container(
                                           decoration: BoxDecoration(
                                             gradient: LinearGradient(
@@ -222,11 +227,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ),
                                         ),
-                                        // Product Details
                                         Positioned(
-                                          bottom: 16,
-                                          left: 16,
-                                          right: 16,
+                                          bottom: screenHeight * 0.01,
+                                          left: screenWidth * 0.04,
+                                          right: screenWidth * 0.04,
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -234,26 +238,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Text(
                                                 product.productName,
                                                 style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: screenWidth * 0.05,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white,
                                                 ),
                                               ),
-                                              SizedBox(height: 4),
+                                              SizedBox(
+                                                  height: screenHeight * 0.001),
                                               Text(
                                                 'Code: ${product.productCode}',
                                                 style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: screenWidth * 0.04,
                                                   color: Colors.white70,
                                                 ),
                                               ),
-                                              SizedBox(height: 4),
+                                              SizedBox(
+                                                  height: screenHeight * 0.001),
                                               Text(
                                                 'ZRP: ₹${product.salesRate.toStringAsFixed(2)}',
                                                 style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: screenWidth * 0.040,
                                                   fontWeight: FontWeight.w600,
-                                                  color: AppColors.buttonColor,
+                                                  color:
+                                                      AppColors.secondaryColor,
                                                 ),
                                               ),
                                             ],
@@ -269,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       options: CarouselOptions(
-                        height: 250,
+                        height: screenHeight * 0.25,
                         enlargeCenterPage: true,
                         autoPlay: false,
                         aspectRatio: 16 / 9,
@@ -285,8 +292,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => CartScreen()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BillingScreen()));
         },
         backgroundColor: Colors.blue,
         child: Icon(Icons.shopping_cart, color: Colors.white),

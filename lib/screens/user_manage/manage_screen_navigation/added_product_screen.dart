@@ -1,11 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:zoyo_bathware/database/CrudOperations/data_services.dart';
+import 'package:zoyo_bathware/database/data_perations/product_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/screens/User%20manage/Add%20And%20Edit/Product%20section/product_add_edit.dart';
+import 'package:zoyo_bathware/screens/user_manage/add_edit/Product%20section/product_add_edit.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
 

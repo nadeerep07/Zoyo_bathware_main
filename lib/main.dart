@@ -13,6 +13,7 @@ void main() async {
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(CartAdapter());
   await Hive.openBox<Product>('products'); //box opeened
+  await Hive.openBox<Category>('categories');
   runApp(MyApp());
 }
 
