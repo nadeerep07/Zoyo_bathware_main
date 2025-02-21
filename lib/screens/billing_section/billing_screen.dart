@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:zoyo_bathware/database/cart_model.dart';
-import 'package:zoyo_bathware/database/data_perations/billing_db.dart';
-import 'package:zoyo_bathware/database/data_perations/cart_db.dart';
+import 'package:zoyo_bathware/database/data_operations/billing_db.dart';
+import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/services/invoice_generator.dart';
+import 'package:zoyo_bathware/services/invoic_generator.dart';
 
 class BillingScreen extends StatefulWidget {
   const BillingScreen({super.key});
@@ -94,8 +94,7 @@ class _BillingScreenState extends State<BillingScreen> {
       discount: discount,
       total: totalAmount - discount,
     );
-
-    // Update the product quantities in the product model (subtract purchased quantity)
+// subtract from quantity of db
     final productBox = await Hive.openBox<Product>('products');
     for (var cartProduct in cartNotifier.value) {
       final productKey = cartProduct.id;
@@ -110,7 +109,6 @@ class _BillingScreenState extends State<BillingScreen> {
       }
     }
 
-    // Clear cart and increment bill number
     await clearCart();
     setState(() {
       billNumber++;

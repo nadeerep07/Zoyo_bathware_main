@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/navigation_screens/details_screen.dart';
+import 'package:zoyo_bathware/detail_screens/details_screen.dart';
 import 'package:zoyo_bathware/screens/all_categories/all_categories.dart';
 import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
 import 'package:zoyo_bathware/screens/home/search_screen.dart';

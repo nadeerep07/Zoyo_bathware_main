@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/data_perations/cart_db.dart';
+import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/navigation_screens/details_screen.dart';
+import 'package:zoyo_bathware/detail_screens/details_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 
 class ProductCard extends StatelessWidget {
@@ -20,18 +20,22 @@ class ProductCard extends StatelessWidget {
     double textFontSize = isGridView ? 16.0 : 14.0;
     double buttonHeight = isGridView ? 15.0 : 45.0;
 
+    bool isOutOfStock = product.quantity == 0;
+
     if (isGridView) {
       return GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProductDetailScreen(
-                productCode: product.id!,
+          if (!isOutOfStock) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailScreen(
+                  productCode: product.id!,
+                ),
               ),
-            ),
-          );
-          print('iamge is passing : ${product.imagePaths}');
+            );
+            print('image is passing : ${product.imagePaths}');
+          }
         },
         child: Container(
           margin: EdgeInsets.symmetric(vertical: margin, horizontal: 10),
@@ -95,10 +99,12 @@ class ProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                'Available: ${product.quantity}',
+                isOutOfStock
+                    ? 'Out of Stock'
+                    : 'Available: ${product.quantity}',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.grey.shade700,
+                  color: isOutOfStock ? Colors.red : Colors.grey.shade700,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -111,18 +117,28 @@ class ProductCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     padding: EdgeInsets.symmetric(vertical: buttonHeight),
-                    side: BorderSide(color: Colors.orange.shade800),
+                    side: BorderSide(
+                        color: isOutOfStock
+                            ? Colors.grey
+                            : Colors.orange.shade800),
                   ),
                   icon: Icon(Icons.shopping_cart,
-                      color: Colors.orange.shade800, size: 18),
+                      color:
+                          isOutOfStock ? Colors.grey : Colors.orange.shade800,
+                      size: 18),
                   label: Text(
-                    "Add to Cart",
-                    style:
-                        TextStyle(fontSize: 13, color: Colors.orange.shade800),
+                    isOutOfStock ? "Out of Stock" : "Add to Cart",
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: isOutOfStock
+                            ? Colors.grey
+                            : Colors.orange.shade800),
                   ),
-                  onPressed: () {
-                    updateQuantity(product, 1);
-                  },
+                  onPressed: isOutOfStock
+                      ? null
+                      : () {
+                          updateQuantity(product, 1);
+                        },
                 ),
               ),
             ],
@@ -132,13 +148,15 @@ class ProductCard extends StatelessWidget {
     } else {
       return GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  ProductDetailScreen(productCode: product.id!),
-            ),
-          );
+          if (!isOutOfStock) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ProductDetailScreen(productCode: product.id!),
+              ),
+            );
+          }
         },
         child: Container(
           margin: EdgeInsets.symmetric(vertical: margin, horizontal: 10),
@@ -196,20 +214,25 @@ class ProductCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Available: ${product.quantity}',
+                  isOutOfStock
+                      ? 'Out of Stock'
+                      : 'Available: ${product.quantity}',
                   style: TextStyle(
                     fontSize: 12.0,
-                    color: Colors.grey.shade700,
+                    color: isOutOfStock ? Colors.red : Colors.grey.shade700,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
             trailing: IconButton(
-              icon: Icon(Icons.shopping_cart, color: Colors.orange.shade800),
-              onPressed: () {
-                updateQuantity(product, 1);
-              },
+              icon: Icon(Icons.shopping_cart,
+                  color: isOutOfStock ? Colors.grey : Colors.orange.shade800),
+              onPressed: isOutOfStock
+                  ? null
+                  : () {
+                      updateQuantity(product, 1);
+                    },
             ),
           ),
         ),

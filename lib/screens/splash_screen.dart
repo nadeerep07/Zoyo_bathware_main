@@ -20,38 +20,30 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: ColoredBox(
-          color: Color(0xFF87CEEB),
-          child: Stack(
-            alignment: Alignment.center,
+      body: ColoredBox(
+        color: Color(0xFF87CEEB),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Positioned(
-                top: 100,
-                child: Image.asset(
-                  'assets/images/PHOTO-2025-02-03-18-58-20.jpg',
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.contain,
-                ),
+              Image.asset(
+                'assets/images/PHOTO-2025-02-03-18-58-20.jpg',
+                width: screenSize.width * 0.5,
+                height: screenSize.height * 0.3,
+                fit: BoxFit.contain,
               ),
-              // Text at bottom center
-              Positioned(
-                bottom: 20,
-                child: Center(
-                  child: Text(
-                    '''Powered by
+              SizedBox(height: 50),
+              Text(
+                '''Powered by
 
 wwww.zoyobathware.com''',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF00008B),
-                      fontSize: 16,
-                    ),
-                  ),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF00008B),
+                  fontSize: 16,
                 ),
               ),
             ],

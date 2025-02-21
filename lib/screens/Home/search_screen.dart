@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/data_perations/category_db.dart';
-import 'package:zoyo_bathware/database/data_perations/product_db.dart';
+import 'package:zoyo_bathware/database/data_operations/category_db.dart';
+import 'package:zoyo_bathware/database/data_operations/product_db.dart';
 import 'package:zoyo_bathware/utilitis/product_card.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
 import 'package:zoyo_bathware/database/product_model.dart';

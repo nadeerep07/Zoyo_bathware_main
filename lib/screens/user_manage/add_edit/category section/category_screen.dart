@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
-import 'package:zoyo_bathware/database/data_perations/category_db.dart';
+import 'package:zoyo_bathware/database/data_operations/category_db.dart';
 import 'package:zoyo_bathware/screens/user_manage/add_edit/category%20section/category_dialog.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';

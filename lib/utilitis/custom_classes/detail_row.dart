@@ -5,6 +5,7 @@ class detail_row extends StatelessWidget {
     super.key,
     required this.label,
     required this.value,
+    TextStyle? valueStyle,
   });
 
   final String label;

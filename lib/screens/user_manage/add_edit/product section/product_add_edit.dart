@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zoyo_bathware/database/data_perations/category_db.dart';
-import 'package:zoyo_bathware/database/data_perations/product_db.dart';
+import 'package:zoyo_bathware/database/data_operations/category_db.dart';
+import 'package:zoyo_bathware/database/data_operations/product_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/screens/user_manage/add_edit/product section/product_controllers.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';

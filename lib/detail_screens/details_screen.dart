@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:zoyo_bathware/database/data_perations/cart_db.dart';
+import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/utilitis/custom_classes/detail_row.dart';
 
@@ -29,6 +29,8 @@ class ProductDetailScreen extends StatelessWidget {
         ),
       );
     }
+
+    bool isOutOfStock = product.quantity == 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -109,7 +111,11 @@ class ProductDetailScreen extends StatelessWidget {
               detail_row(label: 'Material', value: product.type),
               detail_row(label: 'Dimensions', value: product.size),
               detail_row(
-                  label: 'Availability', value: product.quantity.toString()),
+                label: 'Availability',
+                value:
+                    isOutOfStock ? 'Out of Stock' : product.quantity.toString(),
+                valueStyle: isOutOfStock ? TextStyle(color: Colors.red) : null,
+              ),
               detail_row(label: 'Manufacturer', value: 'Zoyo Bathware'),
               const SizedBox(height: 20),
 
@@ -129,24 +135,28 @@ class ProductDetailScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    // addToCart(product);
-                    updateQuantity(product, 1);
-                    log('product aded:${product}');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Added to cart!')),
-                    );
-                  },
+                  onPressed: isOutOfStock
+                      ? null
+                      : () async {
+                          // addToCart(product);
+                          updateQuantity(product, 1);
+                          log('product added: ${product}');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Added to cart!')),
+                          );
+                        },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: isOutOfStock ? Colors.grey : Colors.blue,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Add to Cart',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  child: Text(
+                    isOutOfStock ? 'Out of Stock' : 'Add to Cart',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: isOutOfStock ? Colors.black : Colors.white),
                   ),
                 ),
               ),
