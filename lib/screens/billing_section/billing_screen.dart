@@ -7,7 +7,7 @@ import 'package:zoyo_bathware/database/data_operations/billing_db.dart';
 import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/services/invoic_generator.dart';
+import 'package:zoyo_bathware/services/invoice_generator.dart';
 
 class BillingScreen extends StatefulWidget {
   const BillingScreen({super.key});
@@ -38,6 +38,11 @@ class _BillingScreenState extends State<BillingScreen> {
         calculateTotal();
         setState(() {});
       }
+    });
+
+    // Listen to search text changes to update UI
+    searchController.addListener(() {
+      filterProducts(searchController.text);
     });
   }
 
@@ -93,7 +98,8 @@ class _BillingScreenState extends State<BillingScreen> {
       discount: discount,
       total: totalAmount - discount,
     );
-// subtract from quantity of db
+
+    // Subtract from quantity of db
     final productBox = await Hive.openBox<Product>('products');
     for (var cartProduct in cartNotifier.value) {
       final productKey = cartProduct.id;
@@ -109,6 +115,11 @@ class _BillingScreenState extends State<BillingScreen> {
     }
 
     await clearCart();
+
+    customerNameController.clear();
+    phoneController.clear();
+    discountController.clear();
+
     setState(() {
       billNumber++;
     });
@@ -136,11 +147,12 @@ class _BillingScreenState extends State<BillingScreen> {
     setState(() {});
   }
 
+// search  by name or Code depends on sitution now is by on code
   void filterProducts(String query) {
     setState(() {
       filteredProducts = allProducts
           .where((product) =>
-              product.productName.toLowerCase().contains(query.toLowerCase()))
+              product.productCode.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -157,12 +169,41 @@ class _BillingScreenState extends State<BillingScreen> {
       final existingProductIndex =
           cartNotifier.value.indexWhere((p) => p.id == product.id);
       if (existingProductIndex != -1) {
-        cartNotifier.value[existingProductIndex].quantity = 1;
+        cartNotifier.value[existingProductIndex].quantity++;
       } else {
         product.quantity = 1;
         cartNotifier.value.add(product);
       }
       calculateTotal();
+    });
+  }
+
+  // Discount validation helper method.
+  void updateDiscount(String value) {
+    final inputDiscount = double.tryParse(value) ?? 0;
+
+    if (inputDiscount < 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Discount cannot be negative.")),
+      );
+      discountController.text = discount.toString();
+    } else if (inputDiscount > totalAmount) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Discount cannot exceed total amount.")),
+      );
+      discountController.text = discount.toString();
+    } else {
+      setState(() {
+        discount = inputDiscount;
+      });
+    }
+  }
+
+  // Clears the search input and filtered list
+  void clearSearch() {
+    searchController.clear();
+    setState(() {
+      filteredProducts = List.from(allProducts);
     });
   }
 
@@ -183,7 +224,51 @@ class _BillingScreenState extends State<BillingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Customer Details Card
+              // Search Bar
+              TextField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  labelText: "Search Products",
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: clearSearch,
+                        )
+                      : null,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              if (searchController.text.isNotEmpty)
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: filteredProducts.length,
+                  itemBuilder: (context, index) {
+                    final product = filteredProducts[index];
+                    return ListTile(
+                      leading: Image.file(
+                        File(product.imagePaths.first),
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                      ),
+                      title: Text(product.productName),
+                      subtitle: Text("₹${product.salesRate}"),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () => addProduct(product),
+                      ),
+                    );
+                  },
+                ),
+              const SizedBox(height: 16),
+              // Customer Details input here
               Card(
                 elevation: 3,
                 child: Padding(
@@ -198,7 +283,7 @@ class _BillingScreenState extends State<BillingScreen> {
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
                           Text(
-                              "Date: ${DateFormat('yyyy-MM-dd').format(DateTime.now())}",
+                              "Date: ${DateFormat('dd-MMM-yyyy').format(DateTime.now())}",
                               style: const TextStyle(fontSize: 16)),
                         ],
                       ),
@@ -223,8 +308,9 @@ class _BillingScreenState extends State<BillingScreen> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 16),
-              // Cart Items List
+              // Added Items List
               ValueListenableBuilder<List<Product>>(
                 valueListenable: cartNotifier,
                 builder: (context, cartItems, _) {
@@ -237,8 +323,7 @@ class _BillingScreenState extends State<BillingScreen> {
                           itemCount: cartItems.length,
                           itemBuilder: (context, index) {
                             final product = cartItems[index];
-                            return // Inside the ListTile for each cart item:
-                                Card(
+                            return Card(
                               elevation: 2,
                               margin: const EdgeInsets.symmetric(vertical: 4),
                               child: ListTile(
@@ -257,7 +342,6 @@ class _BillingScreenState extends State<BillingScreen> {
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    // TextField to input quantity
                                     SizedBox(
                                       width: 50,
                                       height: 40,
@@ -301,7 +385,7 @@ class _BillingScreenState extends State<BillingScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              // Discount Input Field
+              // Discount Input Field with validation
               TextField(
                 controller: discountController,
                 keyboardType: TextInputType.number,
@@ -309,14 +393,9 @@ class _BillingScreenState extends State<BillingScreen> {
                   labelText: "Discount Amount",
                   border: OutlineInputBorder(),
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    discount = double.tryParse(value) ?? 0;
-                  });
-                },
+                onChanged: updateDiscount,
               ),
               const SizedBox(height: 16),
-              // Subtotal and Total Card
               Card(
                 elevation: 3,
                 child: Padding(

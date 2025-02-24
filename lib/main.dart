@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:zoyo_bathware/database/cart_model.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
-import 'package:zoyo_bathware/screens/splash_screen.dart';
+import 'package:zoyo_bathware/screens/splash_mode/splash_screen.dart';
 import 'package:zoyo_bathware/utilitis/common/screen_size.dart';
 
 void main() async {

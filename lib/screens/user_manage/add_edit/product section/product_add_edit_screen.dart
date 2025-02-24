@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:zoyo_bathware/database/data_operations/category_db.dart';
 import 'package:zoyo_bathware/database/data_operations/product_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/screens/user_manage/add_edit/product section/product_controllers.dart';
+import 'package:zoyo_bathware/utilitis/custom_classes/product_controllers.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/unique_id.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';

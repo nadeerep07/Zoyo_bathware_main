@@ -88,7 +88,7 @@ class ProductCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "ZRP:${product.salesRate}",
+                    "ZRP: ₹${product.salesRate}",
                     style: TextStyle(
                       fontSize: textFontSize,
                       fontWeight: FontWeight.w500,
@@ -205,7 +205,7 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "ZRP: ${product.salesRate}",
+                  "ZRP: ₹${product.salesRate}",
                   style: TextStyle(
                     fontSize: 14.0,
                     fontWeight: FontWeight.w500,

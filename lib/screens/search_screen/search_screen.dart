@@ -20,6 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
   String selectedCategory = 'All Categories';
   final double _minPrice = 0;
   final double _maxPrice = 40000;
+  RangeValues _priceRange = const RangeValues(0, 40000); // Price range slider
   bool showOutOfStock = true;
   int _selectedSortOption = 0;
 
@@ -42,8 +43,8 @@ class _SearchScreenState extends State<SearchScreen> {
           nameLower.contains(searchLower) || codeLower.contains(searchLower);
       bool matchesCategory = selectedCategory == 'All Categories' ||
           product.category == selectedCategory;
-      bool matchesPrice =
-          product.salesRate >= _minPrice && product.salesRate <= _maxPrice;
+      bool matchesPrice = product.salesRate >= _priceRange.start &&
+          product.salesRate <= _priceRange.end;
       bool matchesStock = !showOutOfStock || product.quantity > 0;
 
       return matchesSearch && matchesCategory && matchesPrice && matchesStock;
@@ -85,7 +86,6 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-// screen...................................................
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,6 +93,7 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         children: [
           _buildSearchBar(),
+          _buildPriceRangeFilter(),
           Expanded(child: _buildProductGrid()),
         ],
       ),
@@ -100,7 +101,6 @@ class _SearchScreenState extends State<SearchScreen> {
           color: AppColors.primaryColor, child: _buildBottomNavigationBar()),
     );
   }
-  // ..................................................................
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -125,6 +125,44 @@ class _SearchScreenState extends State<SearchScreen> {
           filled: true,
           fillColor: Colors.white,
         ),
+      ),
+    );
+  }
+
+  Widget _buildPriceRangeFilter() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Price Range",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          RangeSlider(
+            values: _priceRange,
+            min: _minPrice,
+            max: _maxPrice,
+            divisions: 100,
+            labels: RangeLabels(
+              "₹${_priceRange.start.toStringAsFixed(0)}",
+              "₹${_priceRange.end.toStringAsFixed(0)}",
+            ),
+            onChanged: (RangeValues values) {
+              setState(() {
+                _priceRange = values;
+              });
+              _filterProducts(_searchController.text);
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("₹${_priceRange.start.toStringAsFixed(0)}"),
+              Text("₹${_priceRange.end.toStringAsFixed(0)}"),
+            ],
+          ),
+        ],
       ),
     );
   }

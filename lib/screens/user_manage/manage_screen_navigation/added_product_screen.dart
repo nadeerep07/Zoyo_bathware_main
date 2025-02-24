@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:zoyo_bathware/database/data_operations/product_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/screens/user_manage/add_edit/Product%20section/product_add_edit.dart';
+import 'package:zoyo_bathware/screens/user_manage/add_edit/product%20section/product_add_edit_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
 

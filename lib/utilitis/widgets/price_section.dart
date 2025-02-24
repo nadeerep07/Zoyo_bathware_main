@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/screens/user_manage/add_edit/product section/product_controllers.dart';
+import 'package:zoyo_bathware/utilitis/custom_classes/product_controllers.dart';
 import 'package:zoyo_bathware/utilitis/widgets/text_form_field.dart';
 
 class PriceSection extends StatelessWidget {

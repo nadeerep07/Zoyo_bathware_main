@@ -16,7 +16,8 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
   List<dynamic> filteredInvoices = [];
   final TextEditingController searchController = TextEditingController();
 
-  DateTime? selectedDate;
+  DateTime? startDate;
+  DateTime? endDate;
 
   @override
   void initState() {
@@ -34,7 +35,10 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
   Future<void> loadInvoices() async {
     var invoiceBox = await Hive.openBox('invoices');
     setState(() {
-      invoices = invoiceBox.values.toList();
+      // Sort invoices by date in descending order (newest first)
+      invoices = invoiceBox.values.toList()
+        ..sort((a, b) =>
+            DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
       _applyFilters();
     });
   }
@@ -45,21 +49,19 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
 
   void _applyFilters() {
     final query = searchController.text.toLowerCase();
-    // First filter by phone search
+
     List<dynamic> temp = invoices.where((invoice) {
       final phone = (invoice['phoneNumber'] ?? '').toLowerCase();
       return phone.contains(query);
     }).toList();
 
-    // Then filter by selected date (if any)
-    if (selectedDate != null) {
-      final dateString = DateFormat('yyyy-MM-dd').format(selectedDate!);
+    if (startDate != null && endDate != null) {
       temp = temp.where((invoice) {
-        // invoice['date'] assumed to be in ISO8601 format
         try {
-          final invoiceDate =
-              DateFormat('yyyy-MM-dd').format(DateTime.parse(invoice['date']));
-          return invoiceDate == dateString;
+          final invoiceDate = DateTime.parse(invoice['date']);
+          return invoiceDate
+                  .isAfter(startDate!.subtract(const Duration(days: 1))) &&
+              invoiceDate.isBefore(endDate!.add(const Duration(days: 1)));
         } catch (e) {
           return false;
         }
@@ -74,13 +76,13 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
   String _formatDate(String isoDate) {
     try {
       final date = DateTime.parse(isoDate);
-      return DateFormat('yyyy-MM-dd').format(date);
+      return DateFormat('dd-MMM-yyyy').format(date);
     } catch (e) {
       return isoDate;
     }
   }
 
-  double get totalSalesForSelectedDate {
+  double get totalSalesForSelectedDateRange {
     double sum = 0;
     for (var invoice in filteredInvoices) {
       sum += (invoice['total'] is int || invoice['total'] is double)
@@ -90,17 +92,33 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
     return sum;
   }
 
-  Future<void> _pickDate() async {
+  Future<void> _pickStartDate() async {
     DateTime now = DateTime.now();
     final DateTime? datePicked = await showDatePicker(
       context: context,
-      initialDate: selectedDate ?? now,
+      initialDate: startDate ?? now,
       firstDate: DateTime(now.year - 5),
       lastDate: DateTime(now.year + 1),
     );
     if (datePicked != null) {
       setState(() {
-        selectedDate = datePicked;
+        startDate = datePicked;
+      });
+      _applyFilters();
+    }
+  }
+
+  Future<void> _pickEndDate() async {
+    DateTime now = DateTime.now();
+    final DateTime? datePicked = await showDatePicker(
+      context: context,
+      initialDate: endDate ?? now,
+      firstDate: DateTime(now.year - 5),
+      lastDate: DateTime(now.year + 1),
+    );
+    if (datePicked != null) {
+      setState(() {
+        endDate = datePicked;
       });
       _applyFilters();
     }
@@ -108,27 +126,23 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
 
   void _clearDateFilter() {
     setState(() {
-      selectedDate = null;
+      startDate = null;
+      endDate = null;
     });
     _applyFilters();
   }
 
   @override
   Widget build(BuildContext context) {
-    final String dateFilterText = selectedDate != null
-        ? DateFormat('yyyy-MM-dd').format(selectedDate!)
-        : 'All Dates';
+    final String dateRangeText =
+        startDate != null && endDate != null ? 'Selected' : 'All Dates';
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         title: const Text('Invoices'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.calendar_today),
-            onPressed: _pickDate,
-          ),
-          if (selectedDate != null)
+          if (startDate != null || endDate != null)
             IconButton(
               icon: const Icon(Icons.clear),
               onPressed: _clearDateFilter,
@@ -137,20 +151,61 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
       ),
       body: Column(
         children: [
-          // Date filter and total sales display
+          // Date range filter and total sales display
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Date: $dateFilterText',
+                  'Date Range: $dateRangeText',
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  'Total Sales: ₹${totalSalesForSelectedDate.toStringAsFixed(2)}',
+                  'Total Sales: ₹${totalSalesForSelectedDateRange.toStringAsFixed(2)}',
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          // Start Date and End Date Pickers
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: _pickStartDate,
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        labelText: 'Start Date',
+                        border: OutlineInputBorder(),
+                      ),
+                      child: Text(
+                        startDate != null
+                            ? DateFormat('dd-MMM-yyyy').format(startDate!)
+                            : 'Select Start Date',
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: InkWell(
+                    onTap: _pickEndDate,
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        labelText: 'End Date',
+                        border: OutlineInputBorder(),
+                      ),
+                      child: Text(
+                        endDate != null
+                            ? DateFormat('dd-MMM-yyyy').format(endDate!)
+                            : 'Select End Date',
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

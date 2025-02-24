@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:zoyo_bathware/screens/all_categories/all_categories_screen.dart';
 import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
 import 'package:zoyo_bathware/screens/home/home_screen.dart';
 import 'package:zoyo_bathware/screens/user_manage/add_edit/category%20section/category_screen.dart';
@@ -8,11 +9,10 @@ import 'package:zoyo_bathware/screens/user_manage/product_purchase/purchase_scre
 import 'package:zoyo_bathware/screens/user_manage/product_purchase/purchased_product_screen.dart';
 import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/screens/user_manage/sales_graph/sales_graph_screen.dart';
-import 'package:zoyo_bathware/screens/user_manage/stock_managment_screen/stock_managment.dart';
+import 'package:zoyo_bathware/screens/user_manage/stock_managment_screen/stock_managment_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
 import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
-import '../all_categories/all_categories.dart';
 
 class ManageScreen extends StatefulWidget {
   const ManageScreen({super.key});
