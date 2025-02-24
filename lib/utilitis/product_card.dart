@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/detail_screens/details_screen.dart';
+import 'package:zoyo_bathware/screens/detail_screens/details_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 
 class ProductCard extends StatelessWidget {

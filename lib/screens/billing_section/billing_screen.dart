@@ -68,7 +68,6 @@ class _BillingScreenState extends State<BillingScreen> {
       cartProducts: cartNotifier.value,
     );
 
-    // Prepare invoice items for saving
     List<Map<String, dynamic>> invoiceItems = List.generate(
       cartNotifier.value.length,
       (index) {

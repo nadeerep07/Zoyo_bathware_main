@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-import 'package:zoyo_bathware/detail_screens/invoice_detail_screen.dart';
+import 'package:zoyo_bathware/screens/detail_screens/invoice_detail_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 
 class InvoicesScreen extends StatefulWidget {
