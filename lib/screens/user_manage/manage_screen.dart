@@ -3,7 +3,8 @@ import 'package:hive/hive.dart';
 import 'package:zoyo_bathware/screens/all_categories/all_categories_screen.dart';
 import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
 import 'package:zoyo_bathware/screens/home/home_screen.dart';
-import 'package:zoyo_bathware/screens/user_manage/add_edit/category%20section/category_screen.dart';
+import 'package:zoyo_bathware/screens/settings_screen/settings_screen.dart';
+import 'package:zoyo_bathware/screens/user_manage/add_edit/category_section/category_screen.dart';
 import 'package:zoyo_bathware/screens/user_manage/manage_screen_navigation/added_product_screen.dart';
 import 'package:zoyo_bathware/screens/user_manage/product_purchase/purchase_screen.dart';
 import 'package:zoyo_bathware/screens/user_manage/product_purchase/purchased_product_screen.dart';
@@ -22,7 +23,7 @@ class ManageScreen extends StatefulWidget {
 }
 
 class _ManageScreenState extends State<ManageScreen> {
-  int _selectedIndex = 3; // Set Manage as the selected tab
+  int _selectedIndex = 3;
   double totalSales = 0;
   double todaySales = 0;
   double last7DaysSales = 0;
@@ -152,7 +153,7 @@ class _ManageScreenState extends State<ManageScreen> {
       appBar: AppBar(
         leading: backButton(context),
         title: Text("Manage Products"),
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: AppColors.primaryColor,
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -187,6 +188,8 @@ class _ManageScreenState extends State<ManageScreen> {
                 "Purchase", PurchaseProductScreen()),
             _buildManageItem(context, Icons.assessment, "Stock Management",
                 StockManagementScreen()),
+            _buildManageItem(
+                context, Icons.settings, "Settings", SettingsScreen())
           ],
         ),
       ),

@@ -7,4 +7,5 @@ class AppColors {
   static const Color backgroundColor = Color(0xFFFFFFFF); // White
   static const Color discountColor = Color(0xFF008000); // Dark Blue
   static const Color buttonColor = Color(0xFF031cfc);
+  static const Color headingColor = Color.fromARGB(255, 37, 150, 195);
 }

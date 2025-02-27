@@ -43,6 +43,7 @@ dependencies:
   pdf: ^3.11.3
   open_file: ^3.5.10
   syncfusion_flutter_charts: ^28.2.6
+  image_cropper: ^9.0.0
 
 
 dev_dependencies:
