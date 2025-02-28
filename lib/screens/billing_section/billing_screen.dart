@@ -147,12 +147,13 @@ class _BillingScreenState extends State<BillingScreen> {
     setState(() {});
   }
 
-// search  by name or Code depends on sitution now is by on code
+  // Search by name or code
   void filterProducts(String query) {
     setState(() {
       filteredProducts = allProducts
           .where((product) =>
-              product.productCode.toLowerCase().contains(query.toLowerCase()))
+              product.productCode.toLowerCase().contains(query.toLowerCase()) ||
+              product.productName.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -171,14 +172,23 @@ class _BillingScreenState extends State<BillingScreen> {
       if (existingProductIndex != -1) {
         cartNotifier.value[existingProductIndex].quantity++;
       } else {
-        product.quantity = 1;
-        cartNotifier.value.add(product);
+        // Create a deep copy of the product
+        Product newProduct = Product(
+          id: product.id,
+          productName: product.productName,
+          productCode: product.productCode,
+          salesRate: product.salesRate,
+          quantity: 1, // Initial quantity in the cart
+          imagePaths: List.from(product.imagePaths), size: '', type: '',
+          purchaseRate: 0.0, description: '', category: '', purchaseDate: [],
+        );
+        cartNotifier.value.add(newProduct);
       }
       calculateTotal();
     });
   }
 
-  // Discount validation helper method.
+  // Discount validation helper method
   void updateDiscount(String value) {
     final inputDiscount = double.tryParse(value) ?? 0;
 

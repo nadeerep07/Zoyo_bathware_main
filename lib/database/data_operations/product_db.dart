@@ -8,11 +8,19 @@ final ValueNotifier<List<Product>> productsNotifier = ValueNotifier([]);
 
 Future<void> addProduct(Product product) async {
   var box = Hive.box<Product>(productBox);
+
+  bool productExists = box.values.any(
+      (existingProduct) => existingProduct.productCode == product.productCode);
+
+  if (productExists) {
+    print('Product Code already exists!');
+    return;
+  }
+
   await box.put(product.id, product);
   getAllProducts();
   productsNotifier.notifyListeners();
 
-  // Notify cart about change
   cartNotifier.value.add(product);
   cartNotifier.notifyListeners();
 }

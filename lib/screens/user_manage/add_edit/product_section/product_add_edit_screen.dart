@@ -133,8 +133,7 @@ class _ProductAddEditState extends State<ProductAddEdit> {
                 const SizedBox(height: 20),
                 _buildSectionTitle("Category"),
                 CategorySection(
-                  categories: categoriesNotifier
-                      .value, // Adjust this based on your provider's structure.
+                  categories: categoriesNotifier.value,
                   selectedCategory: _selectedCategory,
                   onChanged: (value) =>
                       setState(() => _selectedCategory = value),

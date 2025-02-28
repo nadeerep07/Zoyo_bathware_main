@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/utilitis/custom_classes/product_controllers.dart';
 import 'package:zoyo_bathware/utilitis/widgets/text_form_field.dart';
 
@@ -18,6 +20,21 @@ class ProductDetailsSection extends StatelessWidget {
           controller: controllers.productCode,
           labelText: 'Product Code',
           prefixIcon: Icons.code,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Product Code is required';
+            }
+
+            var box = Hive.box<Product>('products');
+            bool productExists =
+                box.values.any((product) => product.productCode == value);
+
+            if (productExists) {
+              return 'Product Code already exists!';
+            }
+
+            return null;
+          },
         ),
         const SizedBox(height: 16),
         CustomTextField(

@@ -81,100 +81,127 @@ class _PurchaseProductScreenState extends State<PurchaseProductScreen> {
         backgroundColor: AppColors.primaryColor,
         title: Text('Purchase Product'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DropdownButtonFormField<Product>(
-              value: selectedProduct,
-              decoration: InputDecoration(
-                labelText: 'Select Product',
-                border: OutlineInputBorder(),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth:
+                    constraints.maxWidth > 600 ? 600 : constraints.maxWidth,
               ),
-              items: products.map((Product product) {
-                return DropdownMenuItem<Product>(
-                  value: product,
-                  child: Text(product.productName),
-                );
-              }).toList(),
-              onChanged: (Product? newValue) {
-                setState(() {
-                  selectedProduct = newValue;
-                });
-              },
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              initialValue: purchaseQuantity.toString(),
-              decoration: InputDecoration(
-                labelText: 'Purchase Quantity',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                setState(() {
-                  purchaseQuantity = int.tryParse(value) ?? 1;
-                });
-              },
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              initialValue: purchaseRate.toString(),
-              decoration: InputDecoration(
-                labelText: 'Purchase Rate (₹)',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onChanged: (value) {
-                setState(() {
-                  purchaseRate = double.tryParse(value) ?? 0.0;
-                });
-              },
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              initialValue: saleRate.toString(),
-              decoration: InputDecoration(
-                labelText: 'Sale Rate (₹)',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onChanged: (value) {
-                setState(() {
-                  saleRate = double.tryParse(value) ?? 0.0;
-                });
-              },
-            ),
-            SizedBox(height: 16),
-            GestureDetector(
-              onTap: () => _selectDate(context), // Show the date picker
-              child: AbsorbPointer(
-                child: TextFormField(
-                  controller: TextEditingController(
-                    text: intl.DateFormat('yyyy-MM-dd').format(purchaseDate),
-                  ), // Display the selected date here
-                  decoration: InputDecoration(
-                    labelText: 'Purchase Date',
-                    border: OutlineInputBorder(),
-                    hintText: intl.DateFormat('yyyy-MM-dd')
-                        .format(purchaseDate), // Placeholder
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Autocomplete<Product>(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                        return const Iterable<Product>.empty();
+                      }
+                      return products.where((Product product) =>
+                          product.productName
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()) ||
+                          product.productCode
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                    },
+                    displayStringForOption: (Product product) =>
+                        "${product.productName} (${product.productCode})",
+                    onSelected: (Product product) {
+                      setState(() {
+                        selectedProduct = product;
+                      });
+                    },
+                    fieldViewBuilder:
+                        (context, controller, focusNode, onEditingComplete) {
+                      return TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        decoration: InputDecoration(
+                          labelText: 'Search Product by Name or Code',
+                          border: OutlineInputBorder(),
+                        ),
+                      );
+                    },
                   ),
-                ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    initialValue: purchaseQuantity.toString(),
+                    decoration: InputDecoration(
+                      labelText: 'Purchase Quantity',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        purchaseQuantity = int.tryParse(value) ?? 1;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    initialValue: purchaseRate.toString(),
+                    decoration: InputDecoration(
+                      labelText: 'Purchase Rate (₹)',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    onChanged: (value) {
+                      setState(() {
+                        purchaseRate = double.tryParse(value) ?? 0.0;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    initialValue: saleRate.toString(),
+                    decoration: InputDecoration(
+                      labelText: 'Sale Rate (₹)',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    onChanged: (value) {
+                      setState(() {
+                        saleRate = double.tryParse(value) ?? 0.0;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () => _selectDate(context),
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: TextEditingController(
+                          text: intl.DateFormat('yyyy-MM-dd')
+                              .format(purchaseDate),
+                        ),
+                        decoration: InputDecoration(
+                          labelText: 'Purchase Date',
+                          border: OutlineInputBorder(),
+                          hintText: intl.DateFormat('dd-MMM-yyyy')
+                              .format(purchaseDate),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: _updateProduct,
+                      child: Text('Update Product'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 16),
-            Center(
-              child: ElevatedButton(
-                onPressed: _updateProduct,
-                child: Text('Update Product'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                ),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
