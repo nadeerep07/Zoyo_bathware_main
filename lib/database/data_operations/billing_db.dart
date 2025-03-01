@@ -19,6 +19,7 @@ Future<void> saveInvoice({
   required double subtotal,
   required double discount,
   required double total,
+  required double profit, // Add profit field
 }) async {
   var invoiceBox = await Hive.openBox('invoices');
   await invoiceBox.add({
@@ -30,5 +31,6 @@ Future<void> saveInvoice({
     'subtotal': subtotal,
     'discount': discount,
     'total': total,
+    'profit': profit, // Store profit
   });
 }

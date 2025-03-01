@@ -233,25 +233,8 @@ class _SalesGraphScreenState extends State<SalesGraphScreen> {
 
     for (var invoice in invoices) {
       try {
-        double invoiceTotal = (invoice['total'] is num)
-            ? invoice['total'].toDouble()
-            : double.tryParse(invoice['total'].toString()) ?? 0;
-
-        double salesRate = (invoice['salesRate'] is num)
-            ? invoice['salesRate'].toDouble()
-            : double.tryParse(invoice['salesRate'].toString()) ?? 0;
-
-        double purchaseRate = (invoice['purchaseRate'] is num)
-            ? invoice['purchaseRate'].toDouble()
-            : double.tryParse(invoice['purchaseRate'].toString()) ?? 0;
-
-        int quantity = (invoice['quantity'] is int)
-            ? invoice['quantity']
-            : int.tryParse(invoice['quantity'].toString()) ?? 0;
-
-        double discount = (invoice['discount'] is num)
-            ? invoice['discount'].toDouble()
-            : double.tryParse(invoice['discount'].toString()) ?? 0;
+        double invoiceTotal = invoice['total'] ?? 0;
+        double invoiceProfit = invoice['profit'] ?? 0;
 
         // Ensure invoice date is valid
         DateTime invoiceDate =
@@ -263,18 +246,12 @@ class _SalesGraphScreenState extends State<SalesGraphScreen> {
             ? "${invoiceDate.day}-${invoiceDate.month}-${invoiceDate.year}"
             : "${invoiceDate.month}-${invoiceDate.year}";
 
-        double profit =
-            (salesRate * quantity) - (purchaseRate * quantity) - discount;
-
-        print(
-            "Sales Rate: $salesRate, Purchase Rate: $purchaseRate, Quantity: $quantity, Discount: $discount");
-        print("Invoice Total: $invoiceTotal, Calculated Profit: $profit");
-
         if (salesMap.containsKey(periodKey)) {
           salesMap[periodKey]!.currentPeriodSales += invoiceTotal;
-          salesMap[periodKey]!.profit += profit;
+          salesMap[periodKey]!.profit += invoiceProfit;
         } else {
-          salesMap[periodKey] = SalesData(periodKey, invoiceTotal, profit);
+          salesMap[periodKey] =
+              SalesData(periodKey, invoiceTotal, invoiceProfit);
         }
       } catch (e) {
         print("Error processing invoice: $e");

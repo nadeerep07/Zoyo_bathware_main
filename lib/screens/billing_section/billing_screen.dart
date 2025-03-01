@@ -96,14 +96,24 @@ class _BillingScreenState extends State<BillingScreen> {
 
   Future<void> saveInvoiceData(String formattedBillNumber) async {
     List<Map<String, dynamic>> invoiceItems = cartNotifier.value.map((product) {
+      double profit = (product.salesRate * product.quantity) -
+          (product.purchaseRate * product.quantity);
+
       return {
         'sno': product.id,
         'productName': product.productName,
         'rate': product.salesRate,
+        'purchaseRate': product.purchaseRate, // Include purchase rate
         'quantity': product.quantity,
         'total': (product.salesRate * product.quantity).toStringAsFixed(2),
+        'profit': profit, // Include profit
       };
     }).toList();
+
+    double totalProfit = invoiceItems.fold(
+      0,
+      (sum, item) => sum + (item['profit'] as double),
+    );
 
     await saveInvoice(
       billNumber: formattedBillNumber,
@@ -114,6 +124,7 @@ class _BillingScreenState extends State<BillingScreen> {
       subtotal: totalAmount,
       discount: discount,
       total: totalAmount - discount,
+      profit: totalProfit, // Include total profit
     );
   }
 

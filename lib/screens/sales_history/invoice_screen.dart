@@ -59,9 +59,22 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
       temp = temp.where((invoice) {
         try {
           final invoiceDate = DateTime.parse(invoice['date']);
-          return invoiceDate
-                  .isAfter(startDate!.subtract(const Duration(days: 1))) &&
-              invoiceDate.isBefore(endDate!.add(const Duration(days: 1)));
+          final isSameDay = startDate!.year == endDate!.year &&
+              startDate!.month == endDate!.month &&
+              startDate!.day == endDate!.day;
+
+          if (isSameDay) {
+            // If both dates are the same, check if the invoice date is today
+            final now = DateTime.now();
+            return invoiceDate.year == now.year &&
+                invoiceDate.month == now.month &&
+                invoiceDate.day == now.day;
+          } else {
+            // Otherwise, apply the date range filter
+            return invoiceDate
+                    .isAfter(startDate!.subtract(const Duration(days: 1))) &&
+                invoiceDate.isBefore(endDate!.add(const Duration(days: 1)));
+          }
         } catch (e) {
           return false;
         }

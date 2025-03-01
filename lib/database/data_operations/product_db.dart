@@ -21,7 +21,7 @@ Future<void> addProduct(Product product) async {
   getAllProducts();
   productsNotifier.notifyListeners();
 
-  cartNotifier.value.add(product);
+  // cartNotifier.value.add(product);
   cartNotifier.notifyListeners();
 }
 
