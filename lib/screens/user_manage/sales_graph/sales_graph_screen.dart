@@ -19,7 +19,7 @@ class _SalesGraphScreenState extends State<SalesGraphScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Sales  Analysis",
+          "Sales & Profit Analysis",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.primaryColor,
@@ -63,54 +63,160 @@ class _SalesGraphScreenState extends State<SalesGraphScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Sales Chart
+            // TabBar to switch between Sales and Profit charts
             Expanded(
-              child: FutureBuilder<List<SalesData>>(
-                future: _fetchSalesData(_selectedPeriod),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text("Error: ${snapshot.error}"));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text("No sales data available"));
-                  } else {
-                    return Card(
-                      shape: RoundedRectangleBorder(
+              child: DefaultTabController(
+                length: 2,
+                child: Column(
+                  children: [
+                    // TabBar
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SfCartesianChart(
-                          primaryXAxis: CategoryAxis(),
-                          title: ChartTitle(
-                            text: "Sales Trend - $_selectedPeriod",
-                            textStyle: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
                           ),
-                          legend: Legend(isVisible: true),
-                          tooltipBehavior: TooltipBehavior(enable: true),
-                          series: <LineSeries<SalesData, String>>[
-                            LineSeries<SalesData, String>(
-                              dataSource: snapshot.data!,
-                              xValueMapper: (SalesData sales, _) =>
-                                  sales.period,
-                              yValueMapper: (SalesData sales, _) =>
-                                  sales.currentPeriodSales,
-                              name: 'Sales',
-                              color: Colors.blue,
-                              markerSettings: MarkerSettings(isVisible: true),
-                              dataLabelSettings: DataLabelSettings(
-                                  isVisible: true,
-                                  textStyle: TextStyle(fontSize: 12)),
-                            ),
-                          ],
-                        ),
+                        ],
                       ),
-                    );
-                  }
-                },
+                      child: TabBar(
+                        labelColor: Colors.blue,
+                        unselectedLabelColor: Colors.grey,
+                        tabs: const [
+                          Tab(text: 'Sales'),
+                          Tab(text: 'Profit'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // TabBarView for Sales and Profit charts
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          // Sales Chart
+                          FutureBuilder<List<SalesData>>(
+                            future: _fetchSalesData(_selectedPeriod),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text("Error: ${snapshot.error}"));
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return const Center(
+                                    child: Text("No sales data available"));
+                              } else {
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 4,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: SfCartesianChart(
+                                      primaryXAxis: CategoryAxis(),
+                                      title: ChartTitle(
+                                        text: "Sales Trend - $_selectedPeriod",
+                                        textStyle: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                      legend: Legend(isVisible: true),
+                                      tooltipBehavior:
+                                          TooltipBehavior(enable: true),
+                                      series: <CartesianSeries<dynamic,
+                                          dynamic>>[
+                                        LineSeries<SalesData, String>(
+                                          dataSource: snapshot.data!,
+                                          xValueMapper: (SalesData sales, _) =>
+                                              sales.period,
+                                          yValueMapper: (SalesData sales, _) =>
+                                              sales.currentPeriodSales,
+                                          name: 'Sales',
+                                          color: Colors.blue,
+                                          markerSettings:
+                                              MarkerSettings(isVisible: true),
+                                          dataLabelSettings: DataLabelSettings(
+                                              isVisible: true,
+                                              textStyle:
+                                                  TextStyle(fontSize: 12)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          // Profit Chart
+                          FutureBuilder<List<SalesData>>(
+                            future: _fetchSalesData(_selectedPeriod),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text("Error: ${snapshot.error}"));
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return const Center(
+                                    child: Text("No profit data available"));
+                              } else {
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 4,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: SfCartesianChart(
+                                      primaryXAxis: CategoryAxis(),
+                                      title: ChartTitle(
+                                        text: "Profit Trend - $_selectedPeriod",
+                                        textStyle: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                      legend: Legend(isVisible: true),
+                                      tooltipBehavior:
+                                          TooltipBehavior(enable: true),
+                                      series: <CartesianSeries<dynamic,
+                                          dynamic>>[
+                                        LineSeries<SalesData, String>(
+                                          dataSource: snapshot.data!,
+                                          xValueMapper: (SalesData sales, _) =>
+                                              sales.period,
+                                          yValueMapper: (SalesData sales, _) =>
+                                              sales.profit,
+                                          name: 'Profit',
+                                          color: Colors.green,
+                                          markerSettings:
+                                              MarkerSettings(isVisible: true),
+                                          dataLabelSettings: DataLabelSettings(
+                                              isVisible: true,
+                                              textStyle:
+                                                  TextStyle(fontSize: 12)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -120,37 +226,69 @@ class _SalesGraphScreenState extends State<SalesGraphScreen> {
   }
 
   Future<List<SalesData>> _fetchSalesData(String period) async {
-    var invoiceBox = await Hive.openBox('invoices');
+    var invoiceBox = Hive.box('invoices');
 
     List<dynamic> invoices = invoiceBox.values.toList();
-    Map<String, double> salesMap = {};
+    Map<String, SalesData> salesMap = {};
 
     for (var invoice in invoices) {
-      double invoiceTotal = (invoice['total'] is num)
-          ? invoice['total'].toDouble()
-          : double.tryParse(invoice['total'].toString()) ?? 0;
-
-      DateTime invoiceDate;
       try {
-        invoiceDate = DateTime.parse(invoice['date']);
+        double invoiceTotal = (invoice['total'] is num)
+            ? invoice['total'].toDouble()
+            : double.tryParse(invoice['total'].toString()) ?? 0;
+
+        double salesRate = (invoice['salesRate'] is num)
+            ? invoice['salesRate'].toDouble()
+            : double.tryParse(invoice['salesRate'].toString()) ?? 0;
+
+        double purchaseRate = (invoice['purchaseRate'] is num)
+            ? invoice['purchaseRate'].toDouble()
+            : double.tryParse(invoice['purchaseRate'].toString()) ?? 0;
+
+        int quantity = (invoice['quantity'] is int)
+            ? invoice['quantity']
+            : int.tryParse(invoice['quantity'].toString()) ?? 0;
+
+        double discount = (invoice['discount'] is num)
+            ? invoice['discount'].toDouble()
+            : double.tryParse(invoice['discount'].toString()) ?? 0;
+
+        // Ensure invoice date is valid
+        DateTime invoiceDate =
+            DateTime.tryParse(invoice['date'] ?? '') ?? DateTime(1970, 1, 1);
+
+        if (invoiceDate.year == 1970) continue;
+
+        String periodKey = (period == 'Weekly')
+            ? "${invoiceDate.day}-${invoiceDate.month}-${invoiceDate.year}"
+            : "${invoiceDate.month}-${invoiceDate.year}";
+
+        double profit =
+            (salesRate * quantity) - (purchaseRate * quantity) - discount;
+
+        print(
+            "Sales Rate: $salesRate, Purchase Rate: $purchaseRate, Quantity: $quantity, Discount: $discount");
+        print("Invoice Total: $invoiceTotal, Calculated Profit: $profit");
+
+        if (salesMap.containsKey(periodKey)) {
+          salesMap[periodKey]!.currentPeriodSales += invoiceTotal;
+          salesMap[periodKey]!.profit += profit;
+        } else {
+          salesMap[periodKey] = SalesData(periodKey, invoiceTotal, profit);
+        }
       } catch (e) {
-        continue;
+        print("Error processing invoice: $e");
       }
-
-      String periodKey = (period == 'Weekly')
-          ? "${invoiceDate.day}-${invoiceDate.month}-${invoiceDate.year}"
-          : "${invoiceDate.month}-${invoiceDate.year}";
-
-      salesMap[periodKey] = (salesMap[periodKey] ?? 0) + invoiceTotal;
     }
 
-    return salesMap.entries.map((e) => SalesData(e.key, e.value)).toList();
+    return salesMap.values.toList();
   }
 }
 
 class SalesData {
   final String period;
-  final double currentPeriodSales;
+  double currentPeriodSales;
+  double profit;
 
-  SalesData(this.period, this.currentPeriodSales);
+  SalesData(this.period, this.currentPeriodSales, this.profit);
 }

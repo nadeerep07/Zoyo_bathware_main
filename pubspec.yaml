@@ -48,6 +48,7 @@ dependencies:
   path_provider: ^2.1.5
   flutter_cache_manager: ^3.4.1
   flutter_launcher_icons: ^0.14.3
+  fl_chart: ^0.70.2
 
 
 dev_dependencies:

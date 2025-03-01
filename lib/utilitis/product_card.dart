@@ -25,17 +25,15 @@ class ProductCard extends StatelessWidget {
     if (isGridView) {
       return GestureDetector(
         onTap: () {
-          if (!isOutOfStock) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetailScreen(
-                  productCode: product.id!,
-                ),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductDetailScreen(
+                productCode: product.id!,
               ),
-            );
-            print('image is passing : ${product.imagePaths}');
-          }
+            ),
+          );
+          print('image is passing : ${product.imagePaths}');
         },
         child: Container(
           margin: EdgeInsets.symmetric(vertical: margin, horizontal: 10),
@@ -148,15 +146,13 @@ class ProductCard extends StatelessWidget {
     } else {
       return GestureDetector(
         onTap: () {
-          if (!isOutOfStock) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ProductDetailScreen(productCode: product.id!),
-              ),
-            );
-          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ProductDetailScreen(productCode: product.id!),
+            ),
+          );
         },
         child: Container(
           margin: EdgeInsets.symmetric(vertical: margin, horizontal: 10),

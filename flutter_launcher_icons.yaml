@@ -18,8 +18,8 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/images/PHOTO-2025-02-03-18-58-20.jpg"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
+    background_color: "#FFFFFF"
+    theme_color: "#FFFFFF"
 
   windows:
     generate: true
