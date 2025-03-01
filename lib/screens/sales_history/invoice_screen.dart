@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
 import 'package:zoyo_bathware/screens/detail_screens/invoice_detail_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
+import 'package:zoyo_bathware/utilitis/invoice_widgets/date_range_picker.dart';
+import 'package:zoyo_bathware/utilitis/invoice_widgets/invoice_list.dart';
+import 'package:zoyo_bathware/utilitis/invoice_widgets/search_field.dart';
 
 class InvoicesScreen extends StatefulWidget {
   const InvoicesScreen({super.key});
@@ -35,7 +37,6 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
   Future<void> loadInvoices() async {
     var invoiceBox = await Hive.openBox('invoices');
     setState(() {
-      // Sort invoices by date in descending order (newest first)
       invoices = invoiceBox.values.toList()
         ..sort((a, b) =>
             DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
@@ -64,13 +65,11 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
               startDate!.day == endDate!.day;
 
           if (isSameDay) {
-            // If both dates are the same, check if the invoice date is today
             final now = DateTime.now();
             return invoiceDate.year == now.year &&
                 invoiceDate.month == now.month &&
                 invoiceDate.day == now.day;
           } else {
-            // Otherwise, apply the date range filter
             return invoiceDate
                     .isAfter(startDate!.subtract(const Duration(days: 1))) &&
                 invoiceDate.isBefore(endDate!.add(const Duration(days: 1)));
@@ -84,15 +83,6 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
     setState(() {
       filteredInvoices = temp;
     });
-  }
-
-  String _formatDate(String isoDate) {
-    try {
-      final date = DateTime.parse(isoDate);
-      return DateFormat('dd-MMM-yyyy').format(date);
-    } catch (e) {
-      return isoDate;
-    }
   }
 
   double get totalSalesForSelectedDateRange {
@@ -164,7 +154,6 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
       ),
       body: Column(
         children: [
-          // Date range filter and total sales display
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -182,104 +171,23 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
               ],
             ),
           ),
-          // Start Date and End Date Pickers
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: _pickStartDate,
-                    child: InputDecorator(
-                      decoration: const InputDecoration(
-                        labelText: 'Start Date',
-                        border: OutlineInputBorder(),
-                      ),
-                      child: Text(
-                        startDate != null
-                            ? DateFormat('dd-MMM-yyyy').format(startDate!)
-                            : 'Select Start Date',
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: InkWell(
-                    onTap: _pickEndDate,
-                    child: InputDecorator(
-                      decoration: const InputDecoration(
-                        labelText: 'End Date',
-                        border: OutlineInputBorder(),
-                      ),
-                      child: Text(
-                        endDate != null
-                            ? DateFormat('dd-MMM-yyyy').format(endDate!)
-                            : 'Select End Date',
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          DateRangePicker(
+            startDate: startDate,
+            endDate: endDate,
+            onPickStartDate: _pickStartDate,
+            onPickEndDate: _pickEndDate,
           ),
-          // Search Field
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: searchController,
-              decoration: const InputDecoration(
-                labelText: 'Search by Phone Number',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
-          // Invoices List
-          Expanded(
-            child: filteredInvoices.isEmpty
-                ? const Center(child: Text('No invoices found'))
-                : ListView.separated(
-                    itemCount: filteredInvoices.length,
-                    separatorBuilder: (_, __) => const Divider(height: 1),
-                    itemBuilder: (context, index) {
-                      final invoice = filteredInvoices[index] as Map;
-                      final customerName = invoice['customerName'] ?? '';
-                      final phoneNumber = invoice['phoneNumber'] ?? '';
-                      final date = invoice['date'] ?? '';
-                      final total = invoice['total'] ?? 0;
-
-                      return ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.blueAccent,
-                          foregroundColor: Colors.white,
-                          child: Text('${index + 1}'),
-                        ),
-                        title: Text('Customer: $customerName'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Phone: $phoneNumber'),
-                            Text('Date: ${_formatDate(date)}'),
-                          ],
-                        ),
-                        trailing: Text('₹$total',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16)),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  InvoiceDetailScreen(invoice: invoice),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
+          SearchField(controller: searchController),
+          InvoiceList(
+            invoices: filteredInvoices,
+            onTap: (invoice) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InvoiceDetailScreen(invoice: invoice),
+                ),
+              );
+            },
           ),
         ],
       ),

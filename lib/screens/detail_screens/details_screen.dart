@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
 import 'package:zoyo_bathware/utilitis/custom_classes/detail_row.dart';
 
 const String productBox = 'products';
@@ -14,6 +15,23 @@ class ProductDetailScreen extends StatelessWidget {
 
   const ProductDetailScreen({Key? key, required this.productCode})
       : super(key: key);
+
+  void _showCustomSnackBar(BuildContext context, Product product) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${product.productName} added to cart!'),
+        backgroundColor: Colors.green,
+        action: SnackBarAction(
+          label: 'View Cart',
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => BillingScreen()));
+          },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,9 +159,7 @@ class ProductDetailScreen extends StatelessWidget {
                           // addToCart(product);
                           updateQuantity(product, 1);
                           log('product added: ${product}');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Added to cart!')),
-                          );
+                          _showCustomSnackBar(context, product);
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isOutOfStock ? Colors.grey : Colors.blue,

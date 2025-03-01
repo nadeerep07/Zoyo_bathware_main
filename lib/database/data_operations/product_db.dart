@@ -56,3 +56,13 @@ List<Product> getAllProductsSync() {
   var box = Hive.box<Product>(productBox);
   return box.values.toList();
 }
+
+// Future<void> returnProduct(String productId, int quantity) async {
+//   final box = await Hive.openBox<Product>('products');
+//   final product = box.get(productId);
+
+//   if (product != null) {
+//     product.quantity += quantity; // Increase the quantity for returned items
+//     await box.put(productId, product);
+//   }
+// }

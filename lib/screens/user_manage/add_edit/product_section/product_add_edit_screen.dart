@@ -6,13 +6,13 @@ import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/utilitis/custom_classes/product_controllers.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/unique_id.dart';
-import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
-import 'package:zoyo_bathware/utilitis/widgets/category_section.dart';
-import 'package:zoyo_bathware/utilitis/widgets/description.dart';
-import 'package:zoyo_bathware/utilitis/widgets/image_picker.dart';
-import 'package:zoyo_bathware/utilitis/widgets/price_section.dart';
-import 'package:zoyo_bathware/utilitis/widgets/product_details_section.dart';
-import 'package:zoyo_bathware/utilitis/widgets/save_button.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/category_section.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/description.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/image_picker.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/price_section.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/product_details_section.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/save_button.dart';
 
 class ProductAddEdit extends StatefulWidget {
   final bool isEditing;
@@ -60,7 +60,8 @@ class _ProductAddEditState extends State<ProductAddEdit> {
   Future<void> _saveOrUpdateProduct() async {
     if (!_formKey.currentState!.validate() || _selectedImages.isEmpty) {
       if (_selectedImages.isEmpty) {
-        _showSnackBar('Please select at least one image');
+        _showCustomSnackBar('Please select at least one image',
+            backgroundColor: Colors.red); // Custom SnackBar for error
       }
       return;
     }
@@ -68,7 +69,10 @@ class _ProductAddEditState extends State<ProductAddEdit> {
     final product = _createProduct();
     await _saveProduct(product);
 
-    _showSnackBar(widget.isEditing ? 'Product updated!' : 'Product added!');
+    _showCustomSnackBar(
+      widget.isEditing ? 'Product updated!' : 'Product added!',
+      backgroundColor: Colors.green, // Custom SnackBar for success
+    );
     Navigator.pop(context);
   }
 
@@ -97,9 +101,19 @@ class _ProductAddEditState extends State<ProductAddEdit> {
     }
   }
 
-  void _showSnackBar(String message) {
+  void _showCustomSnackBar(String message,
+      {Color backgroundColor = Colors.green}) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        ),
+      ),
     );
   }
 

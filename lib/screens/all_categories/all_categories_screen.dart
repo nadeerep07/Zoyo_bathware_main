@@ -6,9 +6,9 @@ import 'package:zoyo_bathware/screens/home/home_screen.dart';
 import 'package:zoyo_bathware/screens/user_manage/manage_screen.dart';
 import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
-import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
-import 'package:zoyo_bathware/utilitis/widgets/category_card.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/bottom_navigation.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/category_card.dart';
 
 class AllCategories extends StatefulWidget {
   const AllCategories({super.key});

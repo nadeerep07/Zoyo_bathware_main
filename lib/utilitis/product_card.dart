@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
 import 'package:zoyo_bathware/screens/detail_screens/details_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 
@@ -21,6 +22,32 @@ class ProductCard extends StatelessWidget {
     double buttonHeight = isGridView ? 15.0 : 45.0;
 
     bool isOutOfStock = product.quantity == 0;
+
+    void _showSnackBar() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '${product.productName} added to cart!',
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          action: SnackBarAction(
+            label: 'View Cart',
+            textColor: Colors.white,
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => BillingScreen()));
+            },
+          ),
+        ),
+      );
+    }
 
     if (isGridView) {
       return GestureDetector(
@@ -136,6 +163,7 @@ class ProductCard extends StatelessWidget {
                       ? null
                       : () {
                           updateQuantity(product, 1);
+                          _showSnackBar(); // Show SnackBar
                         },
                 ),
               ),
@@ -228,6 +256,7 @@ class ProductCard extends StatelessWidget {
                   ? null
                   : () {
                       updateQuantity(product, 1);
+                      _showSnackBar(); // Show SnackBar
                     },
             ),
           ),

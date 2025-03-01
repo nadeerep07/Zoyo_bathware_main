@@ -10,7 +10,7 @@ import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/Home_widgets/carousel_widets.dart';
 import 'package:zoyo_bathware/utilitis/Home_widgets/drawer_widget.dart';
 import 'package:zoyo_bathware/utilitis/Home_widgets/new_arraivals_widget.dart';
-import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/bottom_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -71,7 +71,7 @@ class NewArrivalsWidget extends StatelessWidget {
                         );
                       },
                       child: SizedBox(
-                        width: screenWidth * 0.6,
+                        width: screenWidth * 0.45, // Adjust width for two items
                         child: Card(
                           elevation: 6,
                           shape: RoundedRectangleBorder(
@@ -144,9 +144,10 @@ class NewArrivalsWidget extends StatelessWidget {
                   },
                   options: CarouselOptions(
                     height: screenHeight * 0.25,
-                    enlargeCenterPage: true,
+                    enlargeCenterPage: false,
                     autoPlay: false,
                     aspectRatio: 16 / 9,
+                    viewportFraction: 0.64, // spacing between itemas
                     enableInfiniteScroll: true,
                   ),
                 );

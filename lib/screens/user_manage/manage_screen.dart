@@ -12,8 +12,8 @@ import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/screens/user_manage/sales_graph/sales_graph_screen.dart';
 import 'package:zoyo_bathware/screens/user_manage/stock_managment_screen/stock_managment_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
-import 'package:zoyo_bathware/utilitis/widgets/bottom_navigation.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/bottom_navigation.dart';
 
 class ManageScreen extends StatefulWidget {
   const ManageScreen({super.key});

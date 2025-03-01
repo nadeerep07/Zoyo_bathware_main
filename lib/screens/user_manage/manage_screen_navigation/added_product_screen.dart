@@ -6,7 +6,7 @@ import 'package:zoyo_bathware/database/data_operations/product_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/screens/user_manage/add_edit/product_section/product_add_edit_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});

@@ -38,6 +38,18 @@ class AppDrawer extends StatelessWidget {
               );
             },
           ),
+          // ListTile(
+          //   leading: const Icon(Icons.assignment_return),
+          //   title: const Text('Return Items'),
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => const ReturnItemsScreen()),
+          //     );
+          //   },
+          // ),
           ListTile(
             leading: const Icon(Icons.info),
             title: const Text('About App'),

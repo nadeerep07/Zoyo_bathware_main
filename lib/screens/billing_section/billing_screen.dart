@@ -4,16 +4,9 @@ import 'package:zoyo_bathware/database/cart_model.dart';
 import 'package:zoyo_bathware/database/data_operations/billing_db.dart';
 import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/cart_items_list.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/customer_details_card.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/discount_input_field.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/product_list.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/search_bar.dart'
-    as custom;
-import 'package:zoyo_bathware/utilitis/billing_widgets/total_amount_summary.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/services/invoice_generator.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/action_buttons.dart';
+import 'package:zoyo_bathware/utilitis/billing_widgets/billing_app_bar.dart';
+import 'package:zoyo_bathware/utilitis/billing_widgets/billing_body.dart';
 
 class BillingScreen extends StatefulWidget {
   const BillingScreen({super.key});
@@ -103,10 +96,10 @@ class _BillingScreenState extends State<BillingScreen> {
         'sno': product.id,
         'productName': product.productName,
         'rate': product.salesRate,
-        'purchaseRate': product.purchaseRate, // Include purchase rate
+        'purchaseRate': product.purchaseRate,
         'quantity': product.quantity,
         'total': (product.salesRate * product.quantity).toStringAsFixed(2),
-        'profit': profit, // Include profit
+        'profit': profit,
       };
     }).toList();
 
@@ -124,7 +117,7 @@ class _BillingScreenState extends State<BillingScreen> {
       subtotal: totalAmount,
       discount: discount,
       total: totalAmount - discount,
-      profit: totalProfit, // Include total profit
+      profit: totalProfit,
     );
   }
 
@@ -217,7 +210,6 @@ class _BillingScreenState extends State<BillingScreen> {
           purchaseDate: [],
         );
 
-        // Add product to the cart
         cartNotifier.value.add(newProduct);
         cartNotifier.notifyListeners();
       }
@@ -258,68 +250,23 @@ class _BillingScreenState extends State<BillingScreen> {
   Widget build(BuildContext context) {
     final formattedBillNumber = billNumber.toString().padLeft(4, '0');
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Billing',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: AppColors.primaryColor,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Search Bar
-              custom.SearchBar(
-                  controller: searchController, onClear: clearSearch),
-              const SizedBox(height: 16),
-
-              if (searchController.text.isNotEmpty)
-                ProductList(
-                  products: filteredProducts,
-                  onAdd: addProduct,
-                ),
-              const SizedBox(height: 16),
-
-              // Customer Details input here
-              CustomerDetailsCard(
-                billNumber: formattedBillNumber,
-                customerNameController: customerNameController,
-                phoneController: phoneController,
-              ),
-              const SizedBox(height: 16),
-
-              // Added Items List
-              CartItemsList(
-                cartItems: cartNotifier.value,
-                onRemove: removeProduct,
-                onQuantityChange: (newQuantity) {
-                  setState(() {
-                    calculateTotal();
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              DiscountInputField(
-                controller: discountController,
-                onChange: updateDiscount,
-              ),
-              const SizedBox(height: 16),
-
-              TotalAmountSummary(totalAmount: totalAmount, discount: discount),
-              const SizedBox(height: 16),
-
-              ActionButtons(
-                onCancel: clearCart,
-                onPurchase: generateAndPrintBill,
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
-        ),
+      appBar: const BillingAppBar(),
+      body: BillingBody(
+        searchController: searchController,
+        filteredProducts: filteredProducts,
+        formattedBillNumber: formattedBillNumber,
+        customerNameController: customerNameController,
+        phoneController: phoneController,
+        cartNotifier: cartNotifier,
+        discountController: discountController,
+        totalAmount: totalAmount,
+        discount: discount,
+        onClearSearch: clearSearch,
+        onAddProduct: addProduct,
+        onRemoveProduct: removeProduct,
+        onDiscountChange: updateDiscount,
+        onCancel: clearCart,
+        onPurchase: generateAndPrintBill,
       ),
     );
   }

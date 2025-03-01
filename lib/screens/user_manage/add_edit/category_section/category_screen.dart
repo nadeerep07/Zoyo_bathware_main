@@ -4,9 +4,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
 import 'package:zoyo_bathware/database/data_operations/category_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/utilitis/widgets/category_dialog.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/category_dialog.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/utilitis/widgets/back_botton.dart';
+import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
