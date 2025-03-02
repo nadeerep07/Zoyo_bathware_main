@@ -47,7 +47,7 @@ class PrivacySecurityScreen extends StatelessWidget {
 
       final header = pw.Header(
         level: 0,
-        child: pw.Text('Hive Data Backup',
+        child: pw.Text('Zoyo Data Backup',
             style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
       );
 

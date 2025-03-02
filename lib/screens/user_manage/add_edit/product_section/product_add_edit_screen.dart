@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zoyo_bathware/database/data_operations/category_db.dart';
 import 'package:zoyo_bathware/database/data_operations/product_db.dart';
+import 'package:zoyo_bathware/database/data_operations/purchase_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/utilitis/custom_classes/product_controllers.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
@@ -98,6 +99,7 @@ class _ProductAddEditState extends State<ProductAddEdit> {
       await updateProduct(product.id!, product);
     } else {
       await addProduct(product);
+      await addPurchase(product, int.parse(_controllers.quantity.text));
     }
   }
 

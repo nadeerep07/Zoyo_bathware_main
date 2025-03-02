@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'invoice_model.g.dart';
 
-@HiveType(typeId: 2)
+@HiveType(typeId: 4)
 class Invoice extends HiveObject {
   @HiveField(0)
   final int billNumber;

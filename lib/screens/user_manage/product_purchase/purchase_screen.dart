@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:zoyo_bathware/database/data_operations/product_db.dart';
+import 'package:zoyo_bathware/database/data_operations/purchase_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:intl/intl.dart' as intl;
@@ -42,7 +43,7 @@ class _PurchaseProductScreenState extends State<PurchaseProductScreen> {
       selectedProduct!.salesRate = saleRate;
       selectedProduct!.purchaseDate.add(purchaseDate);
 
-      await updateProduct(selectedProduct!.id!, selectedProduct!);
+      await addPurchase(selectedProduct!, purchaseQuantity);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Product updated successfully')),
