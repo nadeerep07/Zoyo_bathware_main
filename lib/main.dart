@@ -18,10 +18,9 @@ void main() async {
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(PurchaseAdapter());
   Hive.registerAdapter(CartAdapter());
-  final productBox = await Hive.openBox<Product>('products'); //box opeened
+  Hive.openBox<Product>('products'); //box opeened
   await Hive.openBox<Category>('categories');
   runApp(MyApp());
-  productBox.close();
 }
 
 class MyApp extends StatelessWidget {

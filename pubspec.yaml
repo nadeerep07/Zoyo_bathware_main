@@ -49,6 +49,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   flutter_launcher_icons: ^0.14.3
   fl_chart: ^0.70.2
+  smooth_page_indicator: ^1.2.1
 
 
 dev_dependencies:

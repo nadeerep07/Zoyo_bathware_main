@@ -29,10 +29,10 @@ class _ImageManagerScreenState extends State<ImageManagerScreen> {
   }
 
   Future<void> _addImage() async {
-    if (_imagePaths.length >= 3) {
+    if (_imagePaths.length >= 4) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('You can only add up to 3 images.'),
+          content: Text('You can only add up to 4 images.'),
           duration: Duration(seconds: 2),
         ),
       );
@@ -54,6 +54,29 @@ class _ImageManagerScreenState extends State<ImageManagerScreen> {
         _imagePaths.add(savedImagePath);
       });
     }
+  }
+
+  Future<void> _showDeleteConfirmationDialog(int index) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Remove Image"),
+        content: const Text("Are you sure you want to delete this image?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop(); // Close dialog
+              await _removeImage(index);
+            },
+            child: const Text("Delete", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _removeImage(int index) async {
@@ -90,7 +113,7 @@ class _ImageManagerScreenState extends State<ImageManagerScreen> {
                   title: Text('Image ${index + 1}'),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () => _removeImage(index),
+                    onPressed: () => _showDeleteConfirmationDialog(index),
                   ),
                 );
               },

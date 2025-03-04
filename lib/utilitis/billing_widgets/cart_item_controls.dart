@@ -13,6 +13,30 @@ class CartItemControls extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Remove Item"),
+        content: const Text(
+            "Are you sure you want to remove this item from the cart?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+              onRemove(product); // Remove item
+            },
+            child: const Text("Remove", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,8 +52,7 @@ class CartItemControls extends StatelessWidget {
             onSubmitted: (value) {
               final newQuantity = int.tryParse(value) ?? product.quantity;
               product.quantity = newQuantity.clamp(1, 100);
-              onQuantityChange(
-                  newQuantity); // Notify that quantity has changed.
+              onQuantityChange(newQuantity);
             },
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -40,7 +63,7 @@ class CartItemControls extends StatelessWidget {
         const SizedBox(width: 8),
         IconButton(
           icon: const Icon(Icons.remove_circle, color: Colors.red),
-          onPressed: () => onRemove(product),
+          onPressed: () => _showDeleteConfirmationDialog(context),
         ),
       ],
     );

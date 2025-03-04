@@ -10,16 +10,24 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final bool isGridView;
 
-  const ProductCard(
-      {super.key, required this.product, required this.isGridView});
+  const ProductCard({
+    super.key,
+    required this.product,
+    required this.isGridView,
+  });
 
   @override
   Widget build(BuildContext context) {
-    double cardHeight = 250.0;
-    double imageHeight = isGridView ? 100.0 : 100.0;
-    double margin = isGridView ? 8.0 : 10.0;
-    double textFontSize = isGridView ? 16.0 : 14.0;
-    double buttonHeight = isGridView ? 15.0 : 45.0;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Responsive dimensions
+    double cardHeight = screenHeight * 0.2;
+    double imageHeight = isGridView ? screenHeight * 0.1 : screenHeight * 0.1;
+    double margin = isGridView ? screenWidth * 0.02 : screenWidth * 0.03;
+    double textFontSize = isGridView ? screenWidth * 0.04 : screenWidth * 0.035;
+    double buttonHeight =
+        isGridView ? screenHeight * 0.01 : screenHeight * 0.02;
 
     bool isOutOfStock = product.quantity == 0;
 
@@ -41,8 +49,10 @@ class ProductCard extends StatelessWidget {
             textColor: Colors.white,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => BillingScreen()));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => BillingScreen()),
+              );
             },
           ),
         ),
@@ -63,8 +73,8 @@ class ProductCard extends StatelessWidget {
           print('image is passing : ${product.imagePaths}');
         },
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: margin, horizontal: 10),
-          padding: const EdgeInsets.all(10),
+          margin: EdgeInsets.symmetric(vertical: margin, horizontal: margin),
+          padding: EdgeInsets.all(margin),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -74,7 +84,7 @@ class ProductCard extends StatelessWidget {
                 blurRadius: 5,
                 spreadRadius: 1,
                 offset: const Offset(0, 2),
-              ),
+              )
             ],
           ),
           height: cardHeight,
@@ -91,7 +101,7 @@ class ProductCard extends StatelessWidget {
                         fit: BoxFit.cover,
                       )
                     : Container(
-                        width: 120,
+                        width: double.infinity,
                         height: imageHeight,
                         color: Colors.grey[300],
                         child: const Center(
@@ -100,27 +110,34 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
               ),
+              const SizedBox(height: 6),
               Text(
                 product.productName,
                 style: TextStyle(
-                  fontSize: textFontSize,
-                  fontWeight: FontWeight.w900,
+                  fontSize: textFontSize * 0.85,
+                  fontWeight: FontWeight.w700,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                "Code: ${product.productCode}",
+                style: TextStyle(
+                  fontSize: textFontSize * 0.8,
+                  fontWeight: FontWeight.w500,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  Text(
-                    "ZRP: ₹${product.salesRate}",
-                    style: TextStyle(
-                      fontSize: textFontSize,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.primaryColor,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 6),
+              Text(
+                "ZRP: ₹${product.salesRate}",
+                style: TextStyle(
+                  fontSize: textFontSize,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.primaryColor,
+                ),
               ),
               const SizedBox(height: 6),
               Text(
@@ -128,12 +145,12 @@ class ProductCard extends StatelessWidget {
                     ? 'Out of Stock'
                     : 'Available: ${product.quantity}',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: textFontSize * 0.8,
                   color: isOutOfStock ? Colors.red : Colors.grey.shade700,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: 10),
+              const Spacer(),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
@@ -154,7 +171,7 @@ class ProductCard extends StatelessWidget {
                   label: Text(
                     isOutOfStock ? "Out of Stock" : "Add to Cart",
                     style: TextStyle(
-                        fontSize: 13,
+                        fontSize: textFontSize * 0.8,
                         color: isOutOfStock
                             ? Colors.grey
                             : Colors.orange.shade800),
@@ -183,8 +200,8 @@ class ProductCard extends StatelessWidget {
           );
         },
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: margin, horizontal: 10),
-          padding: const EdgeInsets.all(10),
+          margin: EdgeInsets.symmetric(vertical: margin, horizontal: margin),
+          padding: EdgeInsets.all(margin),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -194,7 +211,7 @@ class ProductCard extends StatelessWidget {
                 blurRadius: 5,
                 spreadRadius: 1,
                 offset: const Offset(0, 2),
-              ),
+              )
             ],
           ),
           child: ListTile(
@@ -203,13 +220,13 @@ class ProductCard extends StatelessWidget {
               child: product.imagePaths.isNotEmpty
                   ? Image.file(
                       File(product.imagePaths.first),
-                      width: 60,
-                      height: 80.0,
+                      width: screenWidth * 0.2,
+                      height: screenHeight * 0.1,
                       fit: BoxFit.cover,
                     )
                   : Container(
-                      width: 60,
-                      height: 80.0,
+                      width: screenWidth * 0.2,
+                      height: screenHeight * 0.1,
                       color: Colors.grey[300],
                       child: const Center(
                         child: Icon(Icons.image, size: 30, color: Colors.grey),
@@ -219,7 +236,7 @@ class ProductCard extends StatelessWidget {
             title: Text(
               product.productName,
               style: TextStyle(
-                fontSize: 14.0,
+                fontSize: textFontSize,
                 fontWeight: FontWeight.w900,
               ),
               maxLines: 1,
@@ -231,7 +248,7 @@ class ProductCard extends StatelessWidget {
                 Text(
                   "ZRP: ₹${product.salesRate}",
                   style: TextStyle(
-                    fontSize: 14.0,
+                    fontSize: textFontSize,
                     fontWeight: FontWeight.w500,
                     color: AppColors.primaryColor,
                   ),
@@ -242,7 +259,7 @@ class ProductCard extends StatelessWidget {
                       ? 'Out of Stock'
                       : 'Available: ${product.quantity}',
                   style: TextStyle(
-                    fontSize: 12.0,
+                    fontSize: textFontSize * 0.8,
                     color: isOutOfStock ? Colors.red : Colors.grey.shade700,
                     fontWeight: FontWeight.w500,
                   ),

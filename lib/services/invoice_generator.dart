@@ -50,7 +50,7 @@ Future<void> generateInvoicePdf({
                       style:
                           pw.TextStyle(fontSize: 16, color: PdfColors.white)),
                   pw.Text(
-                      "Date: ${DateFormat('yyyy-MM-dd').format(DateTime.now())}",
+                      "Date: ${DateFormat('dd-MMM-yyyy').format(DateTime.now())}",
                       style:
                           pw.TextStyle(fontSize: 16, color: PdfColors.white)),
                 ],

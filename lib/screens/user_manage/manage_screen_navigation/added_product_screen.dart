@@ -179,6 +179,8 @@ class ProductScreenState extends State<ProductScreen> {
                                 product.productName,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 14),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Text(

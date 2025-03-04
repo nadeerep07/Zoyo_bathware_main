@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
+// import 'package:hive/hive.dart';
+// import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/utilitis/custom_classes/product_controllers.dart';
 import 'package:zoyo_bathware/utilitis/custom_widgets/text_form_field.dart';
 
@@ -25,13 +25,13 @@ class ProductDetailsSection extends StatelessWidget {
               return 'Product Code is required';
             }
 
-            var box = Hive.box<Product>('products');
-            bool productExists =
-                box.values.any((product) => product.productCode == value);
+            // var box = Hive.box<Product>('products');
+            // bool productExists =
+            //     box.values.any((product) => product.productCode == value);
 
-            if (productExists) {
-              return 'Product Code already exists!';
-            }
+            // if (productExists) {
+            //   return 'Product Code already exists!';
+            // }
 
             return null;
           },

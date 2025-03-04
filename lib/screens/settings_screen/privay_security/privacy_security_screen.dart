@@ -11,10 +11,40 @@ class PrivacySecurityScreen extends StatelessWidget {
   const PrivacySecurityScreen({super.key});
 
   Future<void> _clearCacheAndData(BuildContext context) async {
-    await Hive.deleteFromDisk(); // Clears Hive Database
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Cache and data cleared')),
+    bool confirmClear = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Warning',
+            style: TextStyle(color: Colors.red),
+          ),
+          content: const Text(
+              'Are you sure you want to clear all cache and data? This action cannot be undone.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text('Clear'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
     );
+
+    if (confirmClear == true) {
+      await Hive.deleteFromDisk();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cache and data cleared')),
+      );
+    }
   }
 
   Future<void> _backupData(BuildContext context) async {
@@ -51,8 +81,11 @@ class PrivacySecurityScreen extends StatelessWidget {
             style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
       );
 
+      // Open the products box
       final productsBox = await Hive.openBox<Product>('products');
       final productsData = productsBox.toMap();
+      print('Products Data: $productsData'); // Debug print
+
       pdf.addPage(
         pw.Page(
           build: (pw.Context context) {
@@ -80,7 +113,7 @@ class PrivacySecurityScreen extends StatelessWidget {
                     return [
                       product.productCode,
                       product.productName,
-                      product.quantity,
+                      product.quantity.toString(),
                       '\$${product.purchaseRate.toStringAsFixed(2)}',
                       '\$${product.salesRate.toStringAsFixed(2)}',
                     ];
@@ -92,8 +125,11 @@ class PrivacySecurityScreen extends StatelessWidget {
         ),
       );
 
+      // Open the categories box
       final categoriesBox = await Hive.openBox<Category>('categories');
       final categoriesData = categoriesBox.toMap();
+      print('Categories Data: $categoriesData'); // Debug print
+
       pdf.addPage(
         pw.Page(
           build: (pw.Context context) {
@@ -114,7 +150,7 @@ class PrivacySecurityScreen extends StatelessWidget {
                     final category = entry.value;
                     return [
                       entry.key.toString(),
-                      category.name,
+                      category.name ?? 'N/A',
                     ];
                   }).toList(),
                 ),
@@ -124,17 +160,22 @@ class PrivacySecurityScreen extends StatelessWidget {
         ),
       );
 
+      // Save the PDF to a file
       final outputDir = await getApplicationDocumentsDirectory();
       final file = File('${outputDir.path}/hive_backup.pdf');
       await file.writeAsBytes(await pdf.save());
+      print('PDF saved to: ${file.path}'); // Debug print
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('PDF backup created successfully')),
       );
 
+      // Share the PDF
       await Printing.sharePdf(
           bytes: await pdf.save(), filename: 'hive_backup.pdf');
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('Error generating PDF: $e'); // Debug print
+      print('Stack trace: $stackTrace'); // Debug print
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('PDF backup failed: $e')),
       );
@@ -154,7 +195,7 @@ class PrivacySecurityScreen extends StatelessWidget {
       }
 
       final box = await Hive.openBox('products'); // Replace with your box name
-      backupFile.readAsStringSync();
+      final backupData = backupFile.readAsStringSync();
 
       box.clear(); // Clear existing data before restoring
       final Map<String, dynamic> parsedData =

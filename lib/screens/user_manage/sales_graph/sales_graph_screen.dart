@@ -119,7 +119,7 @@ class _SalesGraphScreenState extends State<SalesGraphScreen> {
         child: SfCartesianChart(
           primaryXAxis: CategoryAxis(),
           title: ChartTitle(
-              text: "$type Trend - $_selectedPeriod",
+              text: " $type Trend - $_selectedPeriod",
               textStyle:
                   const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           legend: Legend(isVisible: true),
@@ -160,8 +160,9 @@ class _SalesGraphScreenState extends State<SalesGraphScreen> {
           rows: data
               .map((sales) => DataRow(cells: [
                     DataCell(Text(sales.period)),
-                    DataCell(Text(sales.currentPeriodSales.toStringAsFixed(2))),
-                    DataCell(Text(sales.profit.toStringAsFixed(2))),
+                    DataCell(Text(
+                        '₹${sales.currentPeriodSales.toStringAsFixed(2)}')),
+                    DataCell(Text('₹${sales.profit.toStringAsFixed(2)}')),
                   ]))
               .toList(),
         ),
