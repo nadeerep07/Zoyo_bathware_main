@@ -50,6 +50,8 @@ dependencies:
   flutter_launcher_icons: ^0.14.3
   fl_chart: ^0.70.2
   smooth_page_indicator: ^1.2.1
+  image_picker_for_web: ^3.0.6
+  file_picker: ^9.0.2
 
 
 dev_dependencies:

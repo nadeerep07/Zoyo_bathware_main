@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
@@ -104,101 +106,107 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      drawer: const AppDrawer(),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.15),
-        child: AppBar(
-          backgroundColor: AppColors.backgroundColor,
-          foregroundColor: AppColors.primaryColor,
-          leading: Builder(
-            builder: (context) => IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: Icon(
-                Icons.menu,
-                size: screenWidth * 0.08,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double screenWidth = constraints.maxWidth;
+        double screenHeight = constraints.maxHeight;
+
+        // Define responsive sizes
+        double appBarHeight = kIsWeb ? 100 : screenHeight * 0.15;
+        double imageHeight = kIsWeb ? 95 : screenHeight * 0.1;
+        double iconSize = kIsWeb ? 40 : screenWidth * 0.08;
+        double padding = kIsWeb ? 20 : screenWidth * 0.04;
+
+        return Scaffold(
+          drawer: const AppDrawer(),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(appBarHeight),
+            child: AppBar(
+              backgroundColor: AppColors.backgroundColor,
+              foregroundColor: AppColors.primaryColor,
+              leading: Builder(
+                builder: (context) => IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  icon: Icon(Icons.menu, size: iconSize),
+                ),
               ),
+              centerTitle: true,
+              flexibleSpace: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: screenHeight * 0.005),
+                  Image.asset(
+                    'assets/images/Screenshot 2025-02-03 at 8.38.37 PM.png',
+                    height: imageHeight,
+                  ),
+                ],
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchScreen()));
+                  },
+                  icon: Icon(Icons.search, size: iconSize),
+                ),
+                SizedBox(width: screenWidth * 0.04),
+              ],
             ),
           ),
-          centerTitle: true,
-          flexibleSpace: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: screenHeight * 0.05),
-              Image.asset(
-                'assets/images/Screenshot 2025-02-03 at 8.38.37 PM.png',
-                height: screenHeight * 0.1,
-              ),
-            ],
+          body: Container(
+            color: AppColors.backgroundColor,
+            width: double.infinity,
+            height: double.infinity,
+            padding: EdgeInsets.all(padding),
+            child: Column(
+              children: [
+                // Carousel Slider
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(padding),
+                    child: _carouselImagePaths.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No images added yet',
+                              style: TextStyle(
+                                fontSize: kIsWeb ? 22 : screenWidth * 0.05,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        : CarouselWidget(imagePaths: _carouselImagePaths),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03),
+                // New Arrivals Section
+                NewArrivalsWidget(productsNotifier: productsNotifier),
+              ],
+            ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SearchScreen()));
-              },
-              icon: Icon(
-                Icons.search,
-                size: screenWidth * 0.08,
-              ),
-            ),
-            SizedBox(width: screenWidth * 0.04),
-          ],
-        ),
-      ),
-      body: Container(
-        color: AppColors.backgroundColor,
-        width: double.infinity,
-        height: double.infinity,
-        padding: EdgeInsets.all(screenWidth * 0.04),
-        child: Column(
-          children: [
-            // Carousel Slider at the top
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(screenWidth * 0.02),
-                child: _carouselImagePaths.isEmpty
-                    ? Center(
-                        child: Text(
-                          'No images added yet',
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.05,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      )
-                    : CarouselWidget(imagePaths: _carouselImagePaths),
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.03),
-            // New Arrivals Section
-            NewArrivalsWidget(productsNotifier: productsNotifier),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => BillingScreen()));
-        },
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.shopping_cart, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
-      ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BillingScreen()));
+            },
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.shopping_cart, color: Colors.white),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: CustomBottomNavigationBar(
+            selectedIndex: _selectedIndex,
+            onItemTapped: _onItemTapped,
+          ),
+        );
+      },
     );
   }
 }

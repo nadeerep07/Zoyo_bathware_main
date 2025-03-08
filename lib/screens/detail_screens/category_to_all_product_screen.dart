@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'
+    show kIsWeb; // Import foundation.dart for kIsWeb
 import 'package:zoyo_bathware/database/category_model.dart';
 import 'package:zoyo_bathware/database/data_operations/product_db.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
@@ -65,8 +67,9 @@ class _CategoryToAllProductState extends State<CategoryToAllProduct> {
                   return isGrid
                       ? GridView.builder(
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:
+                                kIsWeb ? 6 : 2, // Increase columns for web
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
                             childAspectRatio: 0.63, // Slightly taller cards

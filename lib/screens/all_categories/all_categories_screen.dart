@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:zoyo_bathware/database/category_model.dart';
 import 'package:zoyo_bathware/database/data_operations/category_db.dart';
 import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
@@ -135,12 +136,13 @@ class _AllCategoriesState extends State<AllCategories> {
                   return isGridView
                       ? LayoutBuilder(
                           builder: (context, constraints) {
+                            int crossAxisCount = kIsWeb ? 5 : 2;
                             double aspectRatio =
                                 constraints.maxWidth < 600 ? 0.9 : 1.3;
                             return GridView.builder(
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
+                                crossAxisCount: crossAxisCount,
                                 crossAxisSpacing: 16,
                                 mainAxisSpacing: 16,
                                 childAspectRatio: aspectRatio,

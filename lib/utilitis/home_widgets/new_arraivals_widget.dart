@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/screens/all_categories/all_categories_screen.dart';
 import 'package:zoyo_bathware/screens/detail_screens/details_screen.dart';
@@ -17,6 +17,14 @@ class NewArrivalsWidget extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Adjust sizes for web
+    final isWeb = kIsWeb;
+    final itemWidth = isWeb ? screenWidth * 0.3 : screenWidth * 0.45;
+    final imageHeight = isWeb ? screenHeight * 0.3 : screenHeight * 0.2;
+    final fontSize = isWeb ? screenWidth * 0.02 : screenWidth * 0.05;
+    final priceFontSize = isWeb ? screenWidth * 0.015 : screenWidth * 0.04;
+    final viewportFraction = isWeb ? 0.3 : 0.64;
+
     return Column(
       children: [
         Row(
@@ -25,7 +33,7 @@ class NewArrivalsWidget extends StatelessWidget {
             Text(
               'New Arrivals',
               style: TextStyle(
-                fontSize: screenWidth * 0.06,
+                fontSize: isWeb ? screenWidth * 0.025 : screenWidth * 0.06,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -41,7 +49,7 @@ class NewArrivalsWidget extends StatelessWidget {
                 'View All',
                 style: TextStyle(
                   color: AppColors.buttonColor,
-                  fontSize: screenWidth * 0.05,
+                  fontSize: isWeb ? screenWidth * 0.015 : screenWidth * 0.04,
                 ),
               ),
             ),
@@ -49,12 +57,12 @@ class NewArrivalsWidget extends StatelessWidget {
         ),
         SizedBox(height: screenHeight * 0.02),
         SizedBox(
-          height: screenHeight * 0.25,
+          height: imageHeight + 50, // Adjust height dynamically
           child: ValueListenableBuilder<List<Product>>(
             valueListenable: productsNotifier,
             builder: (context, products, child) {
               if (products.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: Text('No products found'));
               } else {
                 return CarouselSlider.builder(
                   itemCount: products.length,
@@ -71,7 +79,7 @@ class NewArrivalsWidget extends StatelessWidget {
                         );
                       },
                       child: SizedBox(
-                        width: screenWidth * 0.45, // Adjust width for two items
+                        width: itemWidth,
                         child: Card(
                           elevation: 6,
                           shape: RoundedRectangleBorder(
@@ -84,7 +92,7 @@ class NewArrivalsWidget extends StatelessWidget {
                                 Image.file(
                                   File(product.imagePaths.first),
                                   fit: BoxFit.cover,
-                                  height: screenHeight * 0.2,
+                                  height: imageHeight,
                                   width: double.infinity,
                                 ),
                                 Container(
@@ -110,7 +118,7 @@ class NewArrivalsWidget extends StatelessWidget {
                                       Text(
                                         product.productName,
                                         style: TextStyle(
-                                          fontSize: screenWidth * 0.05,
+                                          fontSize: fontSize,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
                                         ),
@@ -119,7 +127,7 @@ class NewArrivalsWidget extends StatelessWidget {
                                       Text(
                                         'Code: ${product.productCode}',
                                         style: TextStyle(
-                                          fontSize: screenWidth * 0.04,
+                                          fontSize: priceFontSize,
                                           color: Colors.white70,
                                         ),
                                       ),
@@ -127,7 +135,7 @@ class NewArrivalsWidget extends StatelessWidget {
                                       Text(
                                         'ZRP: ₹${product.salesRate.toStringAsFixed(2)}',
                                         style: TextStyle(
-                                          fontSize: screenWidth * 0.04,
+                                          fontSize: priceFontSize,
                                           fontWeight: FontWeight.w600,
                                           color: AppColors.secondaryColor,
                                         ),
@@ -143,11 +151,11 @@ class NewArrivalsWidget extends StatelessWidget {
                     );
                   },
                   options: CarouselOptions(
-                    height: screenHeight * 0.25,
+                    height: imageHeight + 50,
                     enlargeCenterPage: false,
                     autoPlay: false,
                     aspectRatio: 16 / 9,
-                    viewportFraction: 0.64, // spacing between itemas
+                    viewportFraction: viewportFraction,
                     enableInfiniteScroll: true,
                   ),
                 );

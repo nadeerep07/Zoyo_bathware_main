@@ -262,6 +262,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      sha256: "7423298f08f6fc8cce05792bae329f9a93653fc9c08712831b1a55540127995d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.2"
   file_selector_linux:
     dependency: transitive
     description:
@@ -478,7 +486,7 @@ packages:
     source: hosted
     version: "0.8.12+21"
   image_picker_for_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image_picker_for_web
       sha256: "717eb042ab08c40767684327be06a5d8dbb341fe791d514e4b92c7bbe1b7bb83"
@@ -1178,6 +1186,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
+  win32:
+    dependency: transitive
+    description:
+      name: win32
+      sha256: daf97c9d80197ed7b619040e86c8ab9a9dad285e7671ee7390f9180cc828a51e
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.10.1"
   xdg_directories:
     dependency: transitive
     description:

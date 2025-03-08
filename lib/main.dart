@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,8 +11,12 @@ import 'package:zoyo_bathware/utilitis/common/screen_size.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final appDir = await getApplicationDocumentsDirectory();
-  Hive.init(appDir.path);
+  if (!kIsWeb) {
+    final appDocumentDir = await getApplicationDocumentsDirectory();
+    Hive.init(appDocumentDir.path);
+  } else {
+    Hive.initFlutter();
+  }
 
   await Hive.initFlutter();
   Hive.registerAdapter(ProductAdapter());
