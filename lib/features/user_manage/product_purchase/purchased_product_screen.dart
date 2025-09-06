@@ -33,12 +33,10 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
                 firstDate: DateTime(2000),
                 lastDate: DateTime.now(),
               );
-              if (pickedDate != null) {
-                setState(() {
-                  _selectedDate = pickedDate;
-                });
-              }
-            },
+              setState(() {
+                _selectedDate = pickedDate;
+              });
+                        },
           ),
         ],
       ),

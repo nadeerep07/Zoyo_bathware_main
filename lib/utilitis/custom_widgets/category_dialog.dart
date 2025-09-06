@@ -29,12 +29,10 @@ class CategoryDialogState extends State<CategoryDialog> {
   Future<void> pickImage(bool fromGallery) async {
     File? pickedImage = await imagePickerHelper.pickImageFromGallery();
 
-    if (pickedImage != null) {
-      setState(() {
-        imagePath = pickedImage.path;
-      });
+    setState(() {
+      imagePath = pickedImage!.path;
+    });
     }
-  }
 
   @override
   Widget build(BuildContext context) {

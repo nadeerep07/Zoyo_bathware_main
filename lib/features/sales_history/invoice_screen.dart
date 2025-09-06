@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/screens/detail_screens/invoice_detail_screen.dart';
+import 'package:zoyo_bathware/features/detail_screens/invoice_detail_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/invoice_widgets/date_range_picker.dart';
 import 'package:zoyo_bathware/utilitis/invoice_widgets/invoice_list.dart';

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/screens/all_categories/all_categories_screen.dart';
-import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
-import 'package:zoyo_bathware/screens/home/home_screen.dart';
-import 'package:zoyo_bathware/screens/settings_screen/settings_screen.dart';
-import 'package:zoyo_bathware/screens/user_manage/add_edit/category_section/category_screen.dart';
-import 'package:zoyo_bathware/screens/user_manage/manage_screen_navigation/added_product_screen.dart';
-import 'package:zoyo_bathware/screens/user_manage/product_purchase/purchase_screen.dart';
-import 'package:zoyo_bathware/screens/user_manage/product_purchase/purchased_product_screen.dart';
-import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
-import 'package:zoyo_bathware/screens/user_manage/sales_graph/sales_graph_screen.dart';
-import 'package:zoyo_bathware/screens/user_manage/stock_managment_screen/stock_managment_screen.dart';
+import 'package:zoyo_bathware/features/all_categories/all_categories_screen.dart';
+import 'package:zoyo_bathware/features/billing_section/billing_screen.dart';
+import 'package:zoyo_bathware/features/cabinet_screen/cabinet_screen.dart';
+import 'package:zoyo_bathware/features/settings_screen/settings_screen.dart';
+import 'package:zoyo_bathware/features/user_manage/add_edit/category_section/category_screen.dart';
+import 'package:zoyo_bathware/features/user_manage/manage_screen_navigation/added_product_screen.dart';
+import 'package:zoyo_bathware/features/user_manage/product_purchase/purchase_screen.dart';
+import 'package:zoyo_bathware/features/user_manage/product_purchase/purchased_product_screen.dart';
+import 'package:zoyo_bathware/features/user_manage/sales_graph/sales_graph_screen.dart';
+import 'package:zoyo_bathware/features/user_manage/stock_managment_screen/stock_managment_screen.dart';
+import 'package:zoyo_bathware/features/home_screen/view/screens/home_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
 import 'package:zoyo_bathware/utilitis/custom_widgets/bottom_navigation.dart';
@@ -120,32 +120,7 @@ class _ManageScreenState extends State<ManageScreen> {
     );
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
 
-    switch (index) {
-      case 0:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        break;
-      case 1:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AllCategories()));
-        break;
-      case 2:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => CabinetScreen()));
-        break;
-      case 3:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ManageScreen()));
-        break;
-      default:
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,19 +167,6 @@ class _ManageScreenState extends State<ManageScreen> {
                 context, Icons.settings, "Settings", SettingsScreen())
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => BillingScreen()));
-        },
-        backgroundColor: Colors.blue,
-        child: Icon(Icons.shopping_cart, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
       ),
     );
   }

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:zoyo_bathware/database/category_model.dart';
 import 'package:zoyo_bathware/database/data_operations/category_db.dart';
-import 'package:zoyo_bathware/screens/billing_section/billing_screen.dart';
-import 'package:zoyo_bathware/screens/home/home_screen.dart';
-import 'package:zoyo_bathware/screens/user_manage/manage_screen.dart';
-import 'package:zoyo_bathware/screens/cabinet_screen/cabinet_screen.dart';
+import 'package:zoyo_bathware/features/billing_section/billing_screen.dart';
+import 'package:zoyo_bathware/features/cabinet_screen/cabinet_screen.dart';
+import 'package:zoyo_bathware/features/home_screen/view/screens/home_screen.dart';
+import 'package:zoyo_bathware/features/user_manage/manage_screen.dart';
+
+
 import 'package:zoyo_bathware/services/app_colors.dart';
 import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
 import 'package:zoyo_bathware/utilitis/custom_widgets/bottom_navigation.dart';
@@ -19,7 +21,7 @@ class AllCategories extends StatefulWidget {
 }
 
 class _AllCategoriesState extends State<AllCategories> {
-  int _selectedIndex = 1;
+
   bool isGridView = true;
 
   @override
@@ -29,40 +31,6 @@ class _AllCategoriesState extends State<AllCategories> {
     getAllCategories();
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // Navigate based on bottom navigation index.
-    switch (index) {
-      case 0:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AllCategories()),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const CabinetScreen()),
-        );
-        break;
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const ManageScreen()),
-        );
-        break;
-      default:
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,19 +141,6 @@ class _AllCategoriesState extends State<AllCategories> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => BillingScreen()));
-        },
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.shopping_cart, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
       ),
     );
   }

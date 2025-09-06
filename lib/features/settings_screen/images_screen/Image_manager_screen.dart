@@ -104,11 +104,17 @@ class _ImageManagerScreenState extends State<ImageManagerScreen> {
               itemCount: _imagePaths.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  leading: Image.file(
-                    File(_imagePaths[index]),
+                  leading: SizedBox(
                     width: 50,
                     height: 50,
-                    fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(6), // optional for rounded look
+                      child: Image.file(
+                        File(_imagePaths[index]),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                   title: Text('Image ${index + 1}'),
                   trailing: IconButton(

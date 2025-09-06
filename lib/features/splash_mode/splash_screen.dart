@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/screens/home/home_screen.dart';
+import 'package:zoyo_bathware/features/home_screen/view/screens/home_screen.dart';
+import 'package:zoyo_bathware/features/main/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -30,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
       if (status == AnimationStatus.completed) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
       }
     });

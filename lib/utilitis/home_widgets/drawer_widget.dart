@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/screens/sales_history/invoice_screen.dart';
-import 'package:zoyo_bathware/screens/settings_screen/about_app/about_app_screen.dart';
-import 'package:zoyo_bathware/screens/settings_screen/privay_security/privacy_security_screen.dart';
+import 'package:zoyo_bathware/features/sales_history/invoice_screen.dart';
+import 'package:zoyo_bathware/features/settings_screen/about_app/about_app_screen.dart';
+import 'package:zoyo_bathware/features/settings_screen/privay_security/privacy_security_screen.dart';
 import 'package:zoyo_bathware/services/app_colors.dart';
 
 class AppDrawer extends StatelessWidget {

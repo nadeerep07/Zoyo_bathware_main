@@ -6,8 +6,8 @@ import 'package:zoyo_bathware/database/cart_model.dart';
 import 'package:zoyo_bathware/database/product_model.dart';
 import 'package:zoyo_bathware/database/category_model.dart';
 import 'package:zoyo_bathware/database/purchase_model.dart';
-import 'package:zoyo_bathware/screens/splash_mode/splash_screen.dart';
-import 'package:zoyo_bathware/utilitis/common/screen_size.dart';
+import 'package:zoyo_bathware/features/splash_mode/splash_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(primarySwatch: Colors.blue),
         debugShowCheckedModeBanner: false,
         home: Builder(builder: (context) {
-          ScreenSize().initializeScreenSize(context);
+        
           return SplashScreen();
         }));
   }
