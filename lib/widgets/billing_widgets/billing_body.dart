@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/action_buttons.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/cart_items_list.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/customer_details_card.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/discount_input_field.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/product_list.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/total_amount_summary.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
+import 'package:zoyo_bathware/widgets/billing_widgets/action_buttons.dart';
+import 'package:zoyo_bathware/widgets/billing_widgets/cart_items_list.dart';
+import 'package:zoyo_bathware/widgets/billing_widgets/customer_details_card.dart';
+import 'package:zoyo_bathware/widgets/billing_widgets/discount_input_field.dart';
+import 'package:zoyo_bathware/widgets/billing_widgets/product_list.dart';
+import 'package:zoyo_bathware/widgets/billing_widgets/total_amount_summary.dart';
 
 class BillingBody extends StatelessWidget {
   final TextEditingController searchController;

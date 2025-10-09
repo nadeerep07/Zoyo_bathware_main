@@ -4,7 +4,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 
 /// Generates a PDF invoice using the provided details and returns the formatted bill number.
 Future<void> generateInvoicePdf({

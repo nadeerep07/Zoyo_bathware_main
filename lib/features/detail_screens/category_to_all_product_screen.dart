@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'
     show kIsWeb; // Import foundation.dart for kIsWeb
-import 'package:zoyo_bathware/database/category_model.dart';
+import 'package:zoyo_bathware/core/models/category_model.dart';
 import 'package:zoyo_bathware/database/data_operations/product_db.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/utilitis/product_card.dart';
-import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
+import 'package:zoyo_bathware/widgets/product_card.dart';
+import 'package:zoyo_bathware/widgets/custom_widgets/back_botton.dart';
 
 class CategoryToAllProduct extends StatefulWidget {
   final Category category;
@@ -72,7 +72,7 @@ class _CategoryToAllProductState extends State<CategoryToAllProduct> {
                                 kIsWeb ? 6 : 2, // Increase columns for web
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
-                            childAspectRatio: 0.63, // Slightly taller cards
+                            childAspectRatio: 0.64, // Slightly taller cards
                           ),
                           itemCount: filteredProducts.length,
                           itemBuilder: (context, index) {

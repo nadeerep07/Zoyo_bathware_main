@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:zoyo_bathware/database/purchase_model.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/core/models/purchase_model.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 import 'package:intl/intl.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
 
 class PurchasedProductsScreen extends StatefulWidget {
   const PurchasedProductsScreen({super.key});

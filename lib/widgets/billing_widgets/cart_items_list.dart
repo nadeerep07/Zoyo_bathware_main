@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/cart_item_tile.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
+import 'package:zoyo_bathware/widgets/billing_widgets/cart_item_tile.dart';
 
 class CartItemsList extends StatelessWidget {
   final List<Product> cartItems;

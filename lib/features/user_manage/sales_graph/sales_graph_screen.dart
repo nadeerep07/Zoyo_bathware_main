@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
 
 class SalesGraphScreen extends StatefulWidget {
   const SalesGraphScreen({super.key});

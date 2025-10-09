@@ -1,28 +1,10 @@
 import 'dart:io';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/features/billing_section/billing_screen.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 import 'package:zoyo_bathware/features/detail_screens/details_screen.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
+import 'package:zoyo_bathware/widgets/responsive.dart';
 
-// Responsive class
-class Responsive {
-  final BuildContext context;
-  final Size size;
-  final TextScaler textScaler;
-
-  Responsive(this.context)
-      : size = MediaQuery.of(context).size,
-        textScaler = MediaQuery.of(context).textScaler;
-
-  double wp(double percent) => size.width * percent / 100;
-  double hp(double percent) => size.height * percent / 100;
-  double sp(double fontSize) => textScaler.scale(fontSize);
-  double get width => size.width;
-  double get height => size.height;
-}
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -49,9 +31,7 @@ class _ProductCardState extends State<ProductCard>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _scaleAnimation;
-  late Animation<double> _addToCartAnimation;
 
-  bool _isAdding = false;
   bool _isFavorite = false;
 
   @override
@@ -88,9 +68,6 @@ class _ProductCardState extends State<ProductCard>
     _scaleAnimation = Tween<double>(begin: 0.9, end: 1.0).animate(
       CurvedAnimation(parent: _slideController, curve: Curves.easeOut),
     );
-    _addToCartAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _addToCartController, curve: Curves.easeOut),
-    );
   }
 
   void _startEntryAnimation() {
@@ -103,60 +80,7 @@ class _ProductCardState extends State<ProductCard>
     });
   }
 
-  void _animatedAddToCart() async {
-    setState(() => _isAdding = true);
-    _addToCartController.forward();
 
-    updateQuantity(widget.product, 1);
-    _showFlipkartSnackBar();
-
-    await Future.delayed(const Duration(milliseconds: 800));
-    if (mounted) {
-      setState(() => _isAdding = false);
-      _addToCartController.reverse();
-    }
-  }
-
-  void _showFlipkartSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-                size: 16,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                '${widget.product.productName} added to cart',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.green.shade600,
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        margin: const EdgeInsets.all(12),
-      ),
-    );
-  }
 
   double _calculateDiscount() {
     double originalPrice = widget.product.salesRate * 1.3; // Assume 30% markup for demo
@@ -215,248 +139,243 @@ class _ProductCardState extends State<ProductCard>
   }
 
   Widget _buildFlipkartGridImage(Responsive responsive, bool isOutOfStock, double discountPercent) {
-    return Expanded(
-      flex: 3,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(responsive.wp(2)),
-        child: Stack(
-          children: [
-            // Product Image
-            Center(
-              child: widget.product.imagePaths.isNotEmpty
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Image.file(
-                        File(widget.product.imagePaths.first),
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.contain,
-                      ),
-                    )
-                  : Container(
+    return Container(
+      height: responsive.hp(18),
+      width: double.infinity,
+      padding: EdgeInsets.all(responsive.wp(2)),
+      child: Stack(
+        children: [
+          // Product Image
+          Center(
+            child: widget.product.imagePaths.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Image.file(
+                      File(widget.product.imagePaths.first),
                       width: double.infinity,
                       height: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Icon(
-                        Icons.image_outlined,
-                        size: responsive.sp(32),
-                        color: Colors.grey.shade400,
-                      ),
+                      fit: BoxFit.contain,
                     ),
+                  )
+                : Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Icon(
+                      Icons.image_outlined,
+                      size: responsive.sp(32),
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+          ),
+          // Wishlist Icon
+          Positioned(
+            top: 4,
+            right: 4,
+            child: GestureDetector(
+              onTap: () => setState(() => _isFavorite = !_isFavorite),
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  _isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: _isFavorite ? Colors.red : Colors.grey.shade600,
+                  size: 16,
+                ),
+              ),
             ),
-            // Wishlist Icon
+          ),
+          // Discount Badge
+          if (discountPercent > 0 && !isOutOfStock)
             Positioned(
               top: 4,
-              right: 4,
-              child: GestureDetector(
-                onTap: () => setState(() => _isFavorite = !_isFavorite),
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
+              left: 4,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade600,
+                  borderRadius: BorderRadius.circular(3),
+                ),
+                child: Text(
+                  '${discountPercent.toInt()}% off',
+                  style: const TextStyle(
                     color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 1),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: _isFavorite ? Colors.red : Colors.grey.shade600,
-                    size: 16,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ),
-            // Discount Badge
-            if (discountPercent > 0 && !isOutOfStock)
-              Positioned(
-                top: 4,
-                left: 4,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade600,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: Text(
-                    '${discountPercent.toInt()}% off',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+          // Out of Stock Overlay
+          if (isOutOfStock)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(4),
                 ),
-              ),
-            // Out of Stock Overlay
-            if (isOutOfStock)
-              Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade600,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        'Out of Stock',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: responsive.sp(10),
-                        ),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade600,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      'Out of Stock',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: responsive.sp(10),
                       ),
                     ),
                   ),
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
 
   Widget _buildFlipkartGridDetails(Responsive responsive, bool isOutOfStock, double discountPercent) {
-    return Expanded(
-      flex: 2,
-      child: Padding(
-        padding: EdgeInsets.all(responsive.wp(3)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Brand Name (if available)
-            Text(
-              'house of common', // You can replace this with actual brand from product
-              style: TextStyle(
-                fontSize: responsive.sp(10),
-                color: Colors.grey.shade600,
-                fontWeight: FontWeight.w400,
-              ),
+    return Container(
+      padding:  EdgeInsets.all(responsive.wp(1)),
+      child: Column(
+         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Brand Name (if available)
+          Text(
+            'Zoyo Bathware', // You can replace this with actual brand from product
+            style: TextStyle(
+              fontSize: responsive.sp(10),
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w400,
             ),
-            SizedBox(height: responsive.hp(0.3)),
-            // Product Name
-            Text(
-              widget.product.productName,
-              style: TextStyle(
-                fontSize: responsive.sp(12),
-                color: Colors.grey.shade800,
-                fontWeight: FontWeight.w400,
-                height: 1.2,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: responsive.hp(0.3)),
+          // Product Name
+          Text(
+            widget.product.productName,
+            style: TextStyle(
+              fontSize: responsive.sp(12),
+              color: Colors.grey.shade800,
+              fontWeight: FontWeight.w400,
+              height: 1.2,
             ),
-            const Spacer(),
-            // Price Section
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          // Price Section
+          Row(
+            children: [
+              // Discount Badge
+              if (discountPercent > 0 && !isOutOfStock)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  margin: const EdgeInsets.only(right: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade600,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                  child: Text(
+                    '${discountPercent.toInt()}%',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              // Crossed Price
+              if (discountPercent > 0 && !isOutOfStock)
+                Text(
+                  '₹${(widget.product.salesRate * 1.3).toInt()}',
+                  style: TextStyle(
+                    fontSize: responsive.sp(10),
+                    color: Colors.grey.shade500,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+            ],
+          ),
+          SizedBox(height: responsive.hp(0.2)),
+          // Current Price
+          Text(
+            '₹${widget.product.salesRate.toInt()}',
+            style: TextStyle(
+              fontSize: responsive.sp(14),
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
+          SizedBox(height: responsive.hp(0.3)),
+          // Bank Offer (Flipkart style)
+          if (!isOutOfStock)
             Row(
               children: [
-                // Discount Badge
-                if (discountPercent > 0 && !isOutOfStock)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                    margin: const EdgeInsets.only(right: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade600,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                    child: Text(
-                      '${discountPercent.toInt()}%',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 9,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade600,
+                    borderRadius: BorderRadius.circular(2),
                   ),
-                // Crossed Price
-                if (discountPercent > 0 && !isOutOfStock)
-                  Text(
-                    '₹${(widget.product.salesRate * 1.3).toInt()}',
+                  child: Text(
+                    'WOW',
                     style: TextStyle(
-                      fontSize: responsive.sp(10),
-                      color: Colors.grey.shade500,
-                      decoration: TextDecoration.lineThrough,
+                      color: Colors.white,
+                      fontSize: responsive.sp(8),
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                ),
+                SizedBox(width: responsive.wp(1)),
+                Text(
+                  '₹${(widget.product.salesRate * 0.9).toInt()} with Bank offer',
+                  style: TextStyle(
+                    fontSize: responsive.sp(9),
+                    color: Colors.blue.shade700,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: responsive.hp(0.2)),
-            // Current Price
-            Text(
-              '₹${widget.product.salesRate.toInt()}',
-              style: TextStyle(
-                fontSize: responsive.sp(14),
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: responsive.hp(0.3)),
-            // Bank Offer (Flipkart style)
-            if (!isOutOfStock)
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade600,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                    child: Text(
-                      'WOW',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: responsive.sp(8),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: responsive.wp(1)),
-                  Text(
-                    '₹${(widget.product.salesRate * 0.9).toInt()} with Bank offer',
-                    style: TextStyle(
-                      fontSize: responsive.sp(9),
-                      color: Colors.blue.shade700,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            SizedBox(height: responsive.hp(0.5)),
-            // F-assured badge (if applicable)
-            if (!isOutOfStock)
-              Row(
-                children: [
-                  Icon(
-                    Icons.verified_user,
-                    size: responsive.sp(10),
+          SizedBox(height: responsive.hp(0.5)),
+          // F-assured badge (if applicable)
+          if (!isOutOfStock)
+            Row(
+              children: [
+                Icon(
+                  Icons.verified_user,
+                  size: responsive.sp(10),
+                  color: Colors.blue.shade600,
+                ),
+                SizedBox(width: responsive.wp(1)),
+                Text(
+                  'Assured',
+                  style: TextStyle(
+                    fontSize: responsive.sp(9),
                     color: Colors.blue.shade600,
+                    fontWeight: FontWeight.w500,
                   ),
-                  SizedBox(width: responsive.wp(1)),
-                  Text(
-                    'Assured',
-                    style: TextStyle(
-                      fontSize: responsive.sp(9),
-                      color: Colors.blue.shade600,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-          ],
-        ),
+                ),
+              ],
+            ),
+        ],
       ),
     );
   }

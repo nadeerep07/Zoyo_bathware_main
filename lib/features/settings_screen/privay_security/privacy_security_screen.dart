@@ -4,8 +4,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:zoyo_bathware/database/category_model.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/core/models/category_model.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 
 class PrivacySecurityScreen extends StatelessWidget {
   const PrivacySecurityScreen({super.key});

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/database/category_model.dart';
+import 'package:zoyo_bathware/core/models/category_model.dart';
 import 'package:zoyo_bathware/database/data_operations/category_db.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/utilitis/product_card.dart';
-import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
+import 'package:zoyo_bathware/widgets/product_card.dart';
+import 'package:zoyo_bathware/widgets/custom_widgets/back_botton.dart';
+import 'package:zoyo_bathware/widgets/responsive.dart';
 
 
 class CabinetScreen extends StatefulWidget {
@@ -94,7 +95,7 @@ class _CabinetScreenState extends State<CabinetScreen> {
                                 res.width > 600 ? 3 : 2, // tablets get 3
                             crossAxisSpacing: res.wp(2.5),
                             mainAxisSpacing: res.hp(1.5),
-                            childAspectRatio: res.width > 600 ? 0.7 : 0.54,
+                            childAspectRatio: res.width > 600 ? 0.4 : 0.64,
                           ),
                           itemCount: filteredProducts.length,
                           itemBuilder: (context, index) {

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 
 class ProductList extends StatelessWidget {
   final List<Product> products;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/database/category_model.dart';
+import 'package:zoyo_bathware/core/models/category_model.dart';
 
 class CategorySection extends StatelessWidget {
   final List<Category> categories;

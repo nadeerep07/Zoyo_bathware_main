@@ -4,7 +4,7 @@ import 'package:zoyo_bathware/features/billing_section/billing_screen.dart';
 import 'package:zoyo_bathware/features/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/features/home_screen/view/screens/home_screen.dart';
 import 'package:zoyo_bathware/features/user_manage/manage_screen.dart';
-import 'package:zoyo_bathware/utilitis/custom_widgets/bottom_navigation.dart';
+import 'package:zoyo_bathware/widgets/custom_widgets/bottom_navigation.dart';
 
 
 class MainScreen extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
+import 'package:zoyo_bathware/widgets/custom_widgets/back_botton.dart';
 
 const String productBox = 'products';
 

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/features/settings_screen/about_app/about_app_screen.dart';
 import 'package:zoyo_bathware/features/settings_screen/images_screen/Image_manager_screen.dart';
 import 'package:zoyo_bathware/features/settings_screen/privay_security/privacy_security_screen.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
+
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

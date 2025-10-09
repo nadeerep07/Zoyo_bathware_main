@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
 
 class ImagePickerSection extends StatelessWidget {
   final List<XFile> selectedImages;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class detail_row extends StatelessWidget {
-  const detail_row({
+class DetailRow extends StatelessWidget {
+  const DetailRow({
     super.key,
     required this.label,
     required this.value,

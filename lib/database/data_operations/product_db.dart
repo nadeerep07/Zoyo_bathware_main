@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 
 const String productBox = 'products';
 final ValueNotifier<List<Product>> productsNotifier = ValueNotifier([]);

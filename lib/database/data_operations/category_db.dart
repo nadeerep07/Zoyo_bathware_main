@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/database/category_model.dart';
+import 'package:zoyo_bathware/core/models/category_model.dart';
 
 const String categoryBox = 'categories';
 late Box<Category> _categoryBox;

@@ -5,10 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 import 'package:zoyo_bathware/features/billing_section/billing_screen.dart';
-import 'package:zoyo_bathware/utilitis/custom_classes/detail_row.dart';
-import 'package:zoyo_bathware/utilitis/responsive.dart';
+import 'package:zoyo_bathware/widgets/custom_classes/detail_row.dart';
+import 'package:zoyo_bathware/widgets/responsive.dart';
 
 const String productBox = 'products';
 

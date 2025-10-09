@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/database/cart_model.dart';
+import 'package:zoyo_bathware/constants/invoice_generator.dart';
+import 'package:zoyo_bathware/core/models/cart_model.dart';
 import 'package:zoyo_bathware/database/data_operations/billing_db.dart';
 import 'package:zoyo_bathware/database/data_operations/cart_db.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/services/invoice_generator.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/billing_app_bar.dart';
-import 'package:zoyo_bathware/utilitis/billing_widgets/billing_body.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
+import 'package:zoyo_bathware/widgets/billing_widgets/billing_app_bar.dart';
+import 'package:zoyo_bathware/widgets/billing_widgets/billing_body.dart';
 
 class BillingScreen extends StatefulWidget {
   const BillingScreen({super.key});

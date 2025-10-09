@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 import 'package:zoyo_bathware/features/search_screen/search_screen.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/utilitis/Home_widgets/carousel_widets.dart';
-import 'package:zoyo_bathware/utilitis/Home_widgets/drawer_widget.dart';
-import 'package:zoyo_bathware/utilitis/Home_widgets/new_arraivals_widget.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
+import 'package:zoyo_bathware/widgets/Home_widgets/carousel_widets.dart';
+import 'package:zoyo_bathware/widgets/Home_widgets/drawer_widget.dart';
+import 'package:zoyo_bathware/widgets/Home_widgets/new_arraivals_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

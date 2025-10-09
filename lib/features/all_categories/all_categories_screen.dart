@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:zoyo_bathware/database/category_model.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
+import 'package:zoyo_bathware/core/models/category_model.dart';
 import 'package:zoyo_bathware/database/data_operations/category_db.dart';
-import 'package:zoyo_bathware/features/billing_section/billing_screen.dart';
-import 'package:zoyo_bathware/features/cabinet_screen/cabinet_screen.dart';
-import 'package:zoyo_bathware/features/home_screen/view/screens/home_screen.dart';
-import 'package:zoyo_bathware/features/user_manage/manage_screen.dart';
 
 
-import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
-import 'package:zoyo_bathware/utilitis/custom_widgets/bottom_navigation.dart';
-import 'package:zoyo_bathware/utilitis/custom_widgets/category_card.dart';
+import 'package:zoyo_bathware/widgets/custom_widgets/back_botton.dart';
+import 'package:zoyo_bathware/widgets/custom_widgets/category_card.dart';
 
 class AllCategories extends StatefulWidget {
   const AllCategories({super.key});

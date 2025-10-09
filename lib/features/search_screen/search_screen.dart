@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
 import 'package:zoyo_bathware/database/data_operations/category_db.dart';
 import 'package:zoyo_bathware/database/data_operations/product_db.dart';
- import 'package:zoyo_bathware/utilitis/product_card.dart';
-import 'package:zoyo_bathware/utilitis/custom_widgets/back_botton.dart';
-import 'package:zoyo_bathware/database/product_model.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
+ import 'package:zoyo_bathware/widgets/product_card.dart';
+import 'package:zoyo_bathware/widgets/custom_widgets/back_botton.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 
 // Responsive class
 class Responsive {
@@ -692,7 +692,7 @@ class _SearchScreenState extends State<SearchScreen>
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: responsive.width > 600 ? 3 : 2,
-          childAspectRatio: 0.55,
+          childAspectRatio: 0.64,
           crossAxisSpacing: responsive.wp(0.1),
           mainAxisSpacing: responsive.hp(0.2),
         ),

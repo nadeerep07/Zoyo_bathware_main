@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:zoyo_bathware/database/product_model.dart';
+import 'package:zoyo_bathware/core/models/product_model.dart';
 import 'package:zoyo_bathware/features/all_categories/all_categories_screen.dart';
 import 'package:zoyo_bathware/features/detail_screens/details_screen.dart';
-import 'package:zoyo_bathware/services/app_colors.dart';
-import 'package:zoyo_bathware/utilitis/responsive.dart';
+import 'package:zoyo_bathware/constants/app_colors.dart';
+import 'package:zoyo_bathware/widgets/responsive.dart';
 
 class NewArrivalsWidget extends StatelessWidget {
   final ValueNotifier<List<Product>> productsNotifier;
