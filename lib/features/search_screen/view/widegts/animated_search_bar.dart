@@ -31,7 +31,7 @@ class AnimatedSearchBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha:0.1),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
@@ -53,7 +53,7 @@ class AnimatedSearchBar extends StatelessWidget {
                 prefixIcon: Container(
                   margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.1),
+                    color: AppColors.primaryColor.withValues(alpha:0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -71,7 +71,7 @@ class AnimatedSearchBar extends StatelessWidget {
                         child: Container(
                           margin: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.1),
+                            color: Colors.grey.withValues(alpha:0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(

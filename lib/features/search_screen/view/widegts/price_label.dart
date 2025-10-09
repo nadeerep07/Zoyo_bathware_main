@@ -20,7 +20,7 @@ class PriceLabel extends StatelessWidget {
         vertical: responsive.hp(0.5),
       ),
       decoration: BoxDecoration(
-        color: AppColors.primaryColor.withOpacity(0.1),
+        color: AppColors.primaryColor.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

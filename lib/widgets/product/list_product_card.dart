@@ -34,7 +34,7 @@ class ListProductCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(responsive.wp(2)),
           border: Border.all(color: Colors.grey.shade300, width: 0.5),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 3, offset: const Offset(0, 1))],
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha:0.04), blurRadius: 3, offset: const Offset(0, 1))],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

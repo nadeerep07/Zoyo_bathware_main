@@ -197,7 +197,7 @@ class _SearchScreenState extends State<SearchScreen>
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.1),
+                            color: AppColors.primaryColor.withValues(alpha:0.1),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Text(
@@ -271,9 +271,9 @@ class _SearchScreenState extends State<SearchScreen>
                                               horizontal: 8, vertical: 4),
                                           decoration: BoxDecoration(
                                             color: isSelected
-                                                ? Colors.white.withOpacity(0.2)
+                                                ? Colors.white.withValues(alpha:0.2)
                                                 : AppColors.primaryColor
-                                                    .withOpacity(0.1),
+                                                    .withValues(alpha:0.1),
                                             borderRadius: BorderRadius.circular(12),
                                           ),
                                           child: Text(

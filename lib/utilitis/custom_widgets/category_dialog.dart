@@ -8,7 +8,7 @@ class CategoryDialog extends StatefulWidget {
   final ProductCategory? category;
   final int? index;
 
-  const CategoryDialog({Key? key, this.category, this.index}) : super(key: key);
+  const CategoryDialog({super.key, this.category, this.index});
 
   @override
   CategoryDialogState createState() => CategoryDialogState();

@@ -7,16 +7,16 @@ class CategorySection extends StatelessWidget {
   final Function(String?) onChanged;
 
   const CategorySection({
-    Key? key,
+    super.key,
     required this.categories,
     required this.selectedCategory,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: selectedCategory,
+      initialValue: selectedCategory,
       decoration: const InputDecoration(
         labelText: 'Category',
         border: OutlineInputBorder(),

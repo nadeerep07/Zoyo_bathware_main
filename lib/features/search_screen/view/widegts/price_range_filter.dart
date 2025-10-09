@@ -35,9 +35,9 @@ class PriceRangeFilter extends StatelessWidget {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: AppColors.primaryColor,
-            inactiveTrackColor: AppColors.primaryColor.withOpacity(0.3),
+            inactiveTrackColor: AppColors.primaryColor.withValues(alpha:0.3),
             thumbColor: AppColors.primaryColor,
-            overlayColor: AppColors.primaryColor.withOpacity(0.2),
+            overlayColor: AppColors.primaryColor.withValues(alpha:0.2),
             valueIndicatorColor: AppColors.primaryColor,
           ),
           child: RangeSlider(

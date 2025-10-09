@@ -15,15 +15,15 @@ class WelcomeSectionWidget extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.primaryColor.withOpacity(0.1),
-            AppColors.secondaryColor.withOpacity(0.1),
+            AppColors.primaryColor.withValues(alpha:0.1),
+            AppColors.secondaryColor.withValues(alpha:0.1),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.primaryColor.withOpacity(0.1),
+          color: AppColors.primaryColor.withValues(alpha:0.1),
           width: 1,
         ),
       ),
@@ -55,7 +55,7 @@ class WelcomeSectionWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.primaryColor.withOpacity(0.1),
+              color: AppColors.primaryColor.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(

@@ -9,11 +9,11 @@ class ImagePickerSection extends StatelessWidget {
   final Function(int) onRemoveImage;
 
   const ImagePickerSection({
-    Key? key,
+    super.key,
     required this.selectedImages,
     required this.onPickImage,
     required this.onRemoveImage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class ImagePickerSection extends StatelessWidget {
                       onTap: () => onRemoveImage(index),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.5),
+                          color: Colors.black.withValues(alpha:0.5),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(4),

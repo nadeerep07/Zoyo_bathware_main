@@ -24,7 +24,7 @@ class ProductCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.grey.shade100),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 8, offset: const Offset(0, 2))],
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha:0.02), blurRadius: 8, offset: const Offset(0, 2))],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +50,7 @@ class ProductCard extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-              gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.black.withOpacity(0.1)]),
+              gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.black.withValues(alpha:0.1)]),
             ),
           ),
           // NEW Badge
@@ -69,7 +69,7 @@ class ProductCard extends StatelessWidget {
             right: 8,
             child: Container(
               padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.9), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: Colors.white.withValues(alpha:0.9), shape: BoxShape.circle),
               child: Icon(Icons.favorite_outline, size: kIsWeb ? 16 : responsive.wp(4), color: Colors.grey.shade600),
             ),
           ),
@@ -97,7 +97,7 @@ class ProductCard extends StatelessWidget {
               Container(
                 width: 24,
                 height: 24,
-                decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
+                decoration: BoxDecoration(color: AppColors.primaryColor.withValues(alpha:0.1), borderRadius: BorderRadius.circular(6)),
                 child: Center(child: Icon(Icons.arrow_forward_rounded, size: kIsWeb ? 14 : responsive.wp(3.5), color: AppColors.primaryColor)),
               ),
             ],

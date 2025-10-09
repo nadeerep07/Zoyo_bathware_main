@@ -6,9 +6,9 @@ class DescriptionSection extends StatelessWidget {
   final ProductControllers controllers;
 
   const DescriptionSection({
-    Key? key,
+    super.key,
     required this.controllers,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,10 +6,10 @@ class SaveButton extends StatelessWidget {
   final String label;
 
   const SaveButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.label,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

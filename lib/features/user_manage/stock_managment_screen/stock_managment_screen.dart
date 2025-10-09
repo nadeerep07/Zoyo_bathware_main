@@ -12,10 +12,10 @@ class StockManagementScreen extends StatefulWidget {
   const StockManagementScreen({super.key});
 
   @override
-  _StockManagementScreenState createState() => _StockManagementScreenState();
+  StockManagementScreenState createState() => StockManagementScreenState();
 }
 
-class _StockManagementScreenState extends State<StockManagementScreen> {
+class StockManagementScreenState extends State<StockManagementScreen> {
   TextEditingController searchController = TextEditingController();
   List<Product> products = [];
   List<Product> filteredProducts = [];

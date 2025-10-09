@@ -76,7 +76,7 @@ class ProductScreenState extends State<ProductScreen> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha:0.1),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
@@ -210,7 +210,7 @@ class ProductScreenState extends State<ProductScreen> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 50, vertical: 8),
                                       decoration: BoxDecoration(
-                                        color: Colors.red.withOpacity(0.1),
+                                        color: Colors.red.withValues(alpha:0.1),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Row(

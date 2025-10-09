@@ -52,7 +52,7 @@ class AnimatedAppBar extends StatelessWidget {
               end: Alignment.bottomRight,
               colors: [
                 AppColors.primaryColor,
-                AppColors.primaryColor.withOpacity(0.8),
+                AppColors.primaryColor.withValues(alpha:0.8),
               ],
             ),
           ),
