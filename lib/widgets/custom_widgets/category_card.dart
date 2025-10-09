@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/core/models/category_model.dart';
-import 'package:zoyo_bathware/features/detail_screens/category_to_all_product_screen.dart';
+import 'package:zoyo_bathware/features/detail_screens/view/screens/category_to_all_product_screen.dart';
 
 class CategoryCard extends StatelessWidget {
   final ProductCategory category;
