@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/features/all_categories/view/screens/all_categories_screen.dart';
-import 'package:zoyo_bathware/features/billing_section/billing_screen.dart';
+import 'package:zoyo_bathware/features/billing_section/view/screens/billing_screen.dart';
 import 'package:zoyo_bathware/features/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/features/home_screen/view/screens/home_screen.dart';
 import 'package:zoyo_bathware/features/user_manage/manage_screen.dart';

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/core/models/product_model.dart';
-import 'package:zoyo_bathware/widgets/billing_widgets/cart_item_controls.dart';
+import 'package:zoyo_bathware/features/billing_section/view/widgets/cart_item_controls.dart';
 
 class CartItemTile extends StatelessWidget {
   final Product product;
