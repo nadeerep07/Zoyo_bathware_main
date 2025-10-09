@@ -126,7 +126,7 @@ class PrivacySecurityScreen extends StatelessWidget {
       );
 
       // Open the categories box
-      final categoriesBox = await Hive.openBox<Category>('categories');
+      final categoriesBox = await Hive.openBox<ProductCategory>('categories');
       final categoriesData = categoriesBox.toMap();
       print('Categories Data: $categoriesData'); // Debug print
 

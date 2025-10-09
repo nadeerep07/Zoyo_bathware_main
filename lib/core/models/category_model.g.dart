@@ -6,17 +6,17 @@ part of 'category_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CategoryAdapter extends TypeAdapter<Category> {
+class CategoryAdapter extends TypeAdapter<ProductCategory> {
   @override
   final int typeId = 1;
 
   @override
-  Category read(BinaryReader reader) {
+  ProductCategory read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Category(
+    return ProductCategory(
       name: fields[0] as String,
       imagePath: fields[1] as String,
       id: fields[2] as String,
@@ -24,7 +24,7 @@ class CategoryAdapter extends TypeAdapter<Category> {
   }
 
   @override
-  void write(BinaryWriter writer, Category obj) {
+  void write(BinaryWriter writer, ProductCategory obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)

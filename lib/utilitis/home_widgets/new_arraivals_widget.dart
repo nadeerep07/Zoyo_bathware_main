@@ -5,7 +5,7 @@ import 'package:zoyo_bathware/core/models/product_model.dart';
 import 'package:zoyo_bathware/features/all_categories/view/screens/all_categories_screen.dart';
 import 'package:zoyo_bathware/features/detail_screens/details_screen.dart';
 import 'package:zoyo_bathware/constants/app_colors.dart';
-import 'package:zoyo_bathware/widgets/responsive.dart';
+import 'package:zoyo_bathware/features/search_screen/search_screen.dart';
 
 class NewArrivalsWidget extends StatelessWidget {
   final ValueNotifier<List<Product>> productsNotifier;

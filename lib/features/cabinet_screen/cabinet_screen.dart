@@ -20,7 +20,7 @@ class _CabinetScreenState extends State<CabinetScreen> {
   List<Product> filteredProducts = [];
   ValueNotifier<bool> isGridView = ValueNotifier<bool>(true);
 
-  late Box<Category> _categoryBox;
+  late Box<ProductCategory> _categoryBox;
   late Box<Product> _productBox;
 
   @override
@@ -32,24 +32,26 @@ class _CabinetScreenState extends State<CabinetScreen> {
   }
 
   Future<void> openHiveBoxes() async {
-    _categoryBox = await Hive.openBox<Category>(categoryBox);
+    _categoryBox = await Hive.openBox<ProductCategory>(categoryBox);
     _productBox = await Hive.openBox<Product>('products');
   }
 
-  void loadCabinetProducts() {
-    final allProducts = _productBox.values.toList();
+void loadCabinetProducts() {
+  final allProducts = _productBox.values.toList();
 
-    final cabinetCategory = _categoryBox.values.firstWhere(
-      (category) => category.name.toLowerCase().trim() == 'cabinet',
-    );
+  final cabinetCategory = _categoryBox.values.firstWhere(
+    (category) => category.name.toLowerCase().trim() == 'cabinet',
+    orElse: () => ProductCategory(name: 'cabinet', imagePath: '', id: ''), // fallback category
+  );
 
-    filteredProducts = allProducts.where((product) {
-      return product.category.toString().trim() ==
-          cabinetCategory.name.toString().trim();
-    }).toList();
+  filteredProducts = allProducts.where((product) {
+    return product.category.toString().trim() ==
+        cabinetCategory.name.toString().trim();
+  }).toList();
 
-    setState(() {});
-  }
+  setState(() {});
+}
+
 
   @override
   Widget build(BuildContext context) {

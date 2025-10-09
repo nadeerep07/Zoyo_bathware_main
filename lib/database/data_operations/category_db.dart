@@ -4,9 +4,9 @@ import 'package:hive/hive.dart';
 import 'package:zoyo_bathware/core/models/category_model.dart';
 
 const String categoryBox = 'categories';
-late Box<Category> _categoryBox;
+late Box<ProductCategory> _categoryBox;
 
-final ValueNotifier<List<Category>> categoriesNotifier = ValueNotifier([]);
+final ValueNotifier<List<ProductCategory>> categoriesNotifier = ValueNotifier([]);
 bool _isInitialized = false;
 
 Future<void> init() async {
@@ -14,9 +14,9 @@ Future<void> init() async {
 
   try {
     if (!Hive.isBoxOpen(categoryBox)) {
-      _categoryBox = await Hive.openBox<Category>(categoryBox);
+      _categoryBox = await Hive.openBox<ProductCategory>(categoryBox);
     } else {
-      _categoryBox = Hive.box<Category>(categoryBox);
+      _categoryBox = Hive.box<ProductCategory>(categoryBox);
     }
     _isInitialized = true;
     await getAllCategories();
@@ -26,7 +26,7 @@ Future<void> init() async {
 }
 
 /// Add Category
-Future<void> addCategory(Category category) async {
+Future<void> addCategory(ProductCategory category) async {
   if (!_isInitialized) await init();
 
   try {
@@ -51,7 +51,7 @@ Future<void> getAllCategories() async {
 }
 
 /// Update Category
-Future<void> updateCategory(String categoryId, Category updatedCategory) async {
+Future<void> updateCategory(String categoryId, ProductCategory updatedCategory) async {
   if (!_isInitialized) await init();
 
   try {

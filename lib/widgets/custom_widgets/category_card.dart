@@ -4,7 +4,7 @@ import 'package:zoyo_bathware/core/models/category_model.dart';
 import 'package:zoyo_bathware/features/detail_screens/category_to_all_product_screen.dart';
 
 class CategoryCard extends StatelessWidget {
-  final Category category;
+  final ProductCategory category;
   final bool isGridView;
 
   const CategoryCard(

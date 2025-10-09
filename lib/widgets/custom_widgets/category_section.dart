@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zoyo_bathware/core/models/category_model.dart';
 
 class CategorySection extends StatelessWidget {
-  final List<Category> categories;
+  final List<ProductCategory> categories;
   final String? selectedCategory;
   final Function(String?) onChanged;
 

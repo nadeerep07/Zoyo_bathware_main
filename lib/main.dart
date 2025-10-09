@@ -24,7 +24,7 @@ void main() async {
   Hive.registerAdapter(PurchaseAdapter());
   Hive.registerAdapter(CartAdapter());
   Hive.openBox<Product>('products'); //box opeened
-  await Hive.openBox<Category>('categories');
+  await Hive.openBox<ProductCategory>('categories');
   runApp(MyApp());
 }
 

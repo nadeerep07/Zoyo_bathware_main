@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zoyo_bathware/features/all_categories/all_categories_screen.dart';
-import 'package:zoyo_bathware/features/billing_section/billing_screen.dart';
-import 'package:zoyo_bathware/features/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/features/settings_screen/settings_screen.dart';
 import 'package:zoyo_bathware/features/user_manage/add_edit/category_section/category_screen.dart';
 import 'package:zoyo_bathware/features/user_manage/manage_screen_navigation/added_product_screen.dart';
@@ -10,10 +7,8 @@ import 'package:zoyo_bathware/features/user_manage/product_purchase/purchase_scr
 import 'package:zoyo_bathware/features/user_manage/product_purchase/purchased_product_screen.dart';
 import 'package:zoyo_bathware/features/user_manage/sales_graph/sales_graph_screen.dart';
 import 'package:zoyo_bathware/features/user_manage/stock_managment_screen/stock_managment_screen.dart';
-import 'package:zoyo_bathware/features/home_screen/view/screens/home_screen.dart';
 import 'package:zoyo_bathware/constants/app_colors.dart';
 import 'package:zoyo_bathware/widgets/custom_widgets/back_botton.dart';
-import 'package:zoyo_bathware/widgets/custom_widgets/bottom_navigation.dart';
 
 class ManageScreen extends StatefulWidget {
   const ManageScreen({super.key});
@@ -23,7 +18,6 @@ class ManageScreen extends StatefulWidget {
 }
 
 class _ManageScreenState extends State<ManageScreen> {
-  int _selectedIndex = 3;
   double totalSales = 0;
   double todaySales = 0;
   double last7DaysSales = 0;

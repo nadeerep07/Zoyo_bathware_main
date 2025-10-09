@@ -16,7 +16,7 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  late Box<Category> categoryBox;
+  late Box<ProductCategory> categoryBox;
 
   @override
   void initState() {
@@ -25,12 +25,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   Future<void> openHiveBox() async {
-    categoryBox = await Hive.openBox<Category>('categories');
+    categoryBox = await Hive.openBox<ProductCategory>('categories');
     setState(() {});
     getAllCategories();
   }
 
-  void showCategoryDialog({Category? category, int? index}) {
+  void showCategoryDialog({ProductCategory? category, int? index}) {
     showDialog(
       context: context,
       builder: (context) => CategoryDialog(category: category, index: index),
@@ -55,7 +55,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ),
         backgroundColor: AppColors.primaryColor,
       ),
-      body: ValueListenableBuilder<List<Category>>(
+      body: ValueListenableBuilder<List<ProductCategory>>(
         valueListenable: categoriesNotifier,
         builder: (context, categories, _) {
           if (categories.isEmpty) {
@@ -186,7 +186,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   void _showDeleteConfirmationDialog(
-      BuildContext context, Category category) async {
+      BuildContext context, ProductCategory category) async {
     bool isCategoryUsed =
         await _isCategoryUsed(category.name); // Pass category name
 

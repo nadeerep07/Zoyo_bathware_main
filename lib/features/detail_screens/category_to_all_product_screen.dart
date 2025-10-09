@@ -8,7 +8,7 @@ import 'package:zoyo_bathware/widgets/product_card.dart';
 import 'package:zoyo_bathware/widgets/custom_widgets/back_botton.dart';
 
 class CategoryToAllProduct extends StatefulWidget {
-  final Category category;
+  final ProductCategory category;
 
   const CategoryToAllProduct({super.key, required this.category});
 

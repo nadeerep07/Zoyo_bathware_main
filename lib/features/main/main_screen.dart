@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zoyo_bathware/features/all_categories/all_categories_screen.dart';
+import 'package:zoyo_bathware/features/all_categories/view/screens/all_categories_screen.dart';
 import 'package:zoyo_bathware/features/billing_section/billing_screen.dart';
 import 'package:zoyo_bathware/features/cabinet_screen/cabinet_screen.dart';
 import 'package:zoyo_bathware/features/home_screen/view/screens/home_screen.dart';
@@ -20,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   // List of pages for bottom nav
   final List<Widget> _pages = [
     const HomeScreen(),      // old HomeScreen body moved here
-    const AllCategories(),
+    const AllCategoriesScreen(),
     const CabinetScreen(),
     const ManageScreen(),
   ];

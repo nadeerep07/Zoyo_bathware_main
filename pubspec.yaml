@@ -52,6 +52,7 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   image_picker_for_web: ^3.0.6
   file_picker: ^9.0.2
+  provider: ^6.1.5+1
 
 
 dev_dependencies:
