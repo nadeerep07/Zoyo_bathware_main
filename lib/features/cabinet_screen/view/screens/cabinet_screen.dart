@@ -21,7 +21,7 @@ class CabinetScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: AppColors.primaryColor,
-              leading: backButton(context),
+              automaticallyImplyLeading: false,
               title: Text(
                 'Cabinets',
                 style: TextStyle(fontSize: res.sp(18)),

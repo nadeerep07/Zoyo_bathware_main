@@ -19,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
 
   // List of pages for bottom nav
   final List<Widget> _pages = [
-    const HomeScreen(),      // old HomeScreen body moved here
+    const HomeScreen(),
     const AllCategoriesScreen(),
     const CabinetScreen(),
     const ManageScreen(),
@@ -34,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // 👉 change body on index
+      body: _pages[_selectedIndex], //  change body on index
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,

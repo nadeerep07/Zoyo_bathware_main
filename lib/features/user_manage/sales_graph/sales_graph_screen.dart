@@ -196,7 +196,7 @@ class _SalesGraphScreenState extends State<SalesGraphScreen> {
           ifAbsent: () => SalesData(periodKey, invoiceTotal, invoiceProfit),
         );
       } catch (e) {
-        print("Error processing invoice: $e");
+    //    print("Error processing invoice: $e");
       }
     }
     return salesMap.values.toList();

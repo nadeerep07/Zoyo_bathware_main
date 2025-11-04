@@ -72,7 +72,8 @@ class _SearchScreenState extends State<SearchScreen>
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.5),
       end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic));
+    ).animate(
+        CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic));
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
     );
@@ -100,7 +101,7 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
-    
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: Consumer<SearchViewModel>(
@@ -111,17 +112,42 @@ class _SearchScreenState extends State<SearchScreen>
 
           return CustomScrollView(
             slivers: [
-              AnimatedAppBar(fadeAnimation: _fadeAnimation, scaleAnimation: _scaleAnimation, context: context, responsive: responsive),
+              AnimatedAppBar(
+                  fadeAnimation: _fadeAnimation,
+                  scaleAnimation: _scaleAnimation,
+                  context: context,
+                  responsive: responsive),
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    AnimatedSearchBar(slideAnimation: _slideAnimation, searchBarAnimation: _searchBarAnimation, searchController: _searchController, responsive: responsive, viewModel: viewModel),
-                    FilterToggle(fadeAnimation: _fadeAnimation, filterController: _filterController, responsive: responsive, viewModel: viewModel),
-                    if (viewModel.showFilters) AnimatedFilter(filterAnimation: _filterAnimation, filterController: _filterController, context: context, searchController: _searchController, responsive: responsive, viewModel: viewModel),
+                    AnimatedSearchBar(
+                        slideAnimation: _slideAnimation,
+                        searchBarAnimation: _searchBarAnimation,
+                        searchController: _searchController,
+                        responsive: responsive,
+                        viewModel: viewModel),
+                    FilterToggle(
+                        fadeAnimation: _fadeAnimation,
+                        filterController: _filterController,
+                        responsive: responsive,
+                        viewModel: viewModel),
+                    if (viewModel.showFilters)
+                      AnimatedFilter(
+                          filterAnimation: _filterAnimation,
+                          filterController: _filterController,
+                          context: context,
+                          searchController: _searchController,
+                          responsive: responsive,
+                          viewModel: viewModel),
                   ],
                 ),
               ),
-              AminatedProductGrid(fadeAnimation: _fadeAnimation, slideController: _slideController, scaleController: _scaleController, responsive: responsive, viewModel: viewModel),
+              AminatedProductGrid(
+                  fadeAnimation: _fadeAnimation,
+                  slideController: _slideController,
+                  scaleController: _scaleController,
+                  responsive: responsive,
+                  viewModel: viewModel),
             ],
           );
         },
@@ -154,7 +180,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   void _showCategorySelection() {
     final viewModel = context.read<SearchViewModel>();
-    
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -197,7 +223,8 @@ class _SearchScreenState extends State<SearchScreen>
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withValues(alpha:0.1),
+                            color:
+                                AppColors.primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Text(
@@ -221,7 +248,8 @@ class _SearchScreenState extends State<SearchScreen>
                           itemCount: vm.categories.length,
                           itemBuilder: (context, index) {
                             String category = vm.categories[index];
-                            int productCount = vm.getProductCountForCategory(category);
+                            int productCount =
+                                vm.getProductCountForCategory(category);
                             bool isSelected = vm.selectedCategory == category;
 
                             return AnimatedContainer(
@@ -236,7 +264,8 @@ class _SearchScreenState extends State<SearchScreen>
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(16),
                                   onTap: () {
-                                    vm.updateCategory(category, _searchController.text);
+                                    vm.updateCategory(
+                                        category, _searchController.text);
                                     Navigator.pop(context);
                                   },
                                   child: Padding(
@@ -262,7 +291,8 @@ class _SearchScreenState extends State<SearchScreen>
                                                   ? Colors.white
                                                   : Colors.grey[800],
                                               fontWeight: FontWeight.w600,
-                                              fontSize: Responsive(context).sp(16),
+                                              fontSize:
+                                                  Responsive(context).sp(16),
                                             ),
                                           ),
                                         ),
@@ -271,10 +301,12 @@ class _SearchScreenState extends State<SearchScreen>
                                               horizontal: 8, vertical: 4),
                                           decoration: BoxDecoration(
                                             color: isSelected
-                                                ? Colors.white.withValues(alpha:0.2)
+                                                ? Colors.white
+                                                    .withValues(alpha: 0.2)
                                                 : AppColors.primaryColor
-                                                    .withValues(alpha:0.1),
-                                            borderRadius: BorderRadius.circular(12),
+                                                    .withValues(alpha: 0.1),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                           child: Text(
                                             '$productCount',
@@ -283,7 +315,8 @@ class _SearchScreenState extends State<SearchScreen>
                                                   ? Colors.white
                                                   : AppColors.primaryColor,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: Responsive(context).sp(12),
+                                              fontSize:
+                                                  Responsive(context).sp(12),
                                             ),
                                           ),
                                         ),

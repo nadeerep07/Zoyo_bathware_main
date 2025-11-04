@@ -61,7 +61,7 @@ class NewArrivalsWidget extends StatelessWidget {
                   crossAxisCount: kIsWeb ? 3 : 2,
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 12,
-                  childAspectRatio: 0.75,
+                  childAspectRatio: 0.58,
                 ),
                 itemCount: products.length > 6 ? 6 : products.length,
                 itemBuilder: (context, index) {

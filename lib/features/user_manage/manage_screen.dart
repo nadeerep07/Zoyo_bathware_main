@@ -8,7 +8,6 @@ import 'package:zoyo_bathware/features/user_manage/product_purchase/purchased_pr
 import 'package:zoyo_bathware/features/user_manage/sales_graph/sales_graph_screen.dart';
 import 'package:zoyo_bathware/features/user_manage/stock_managment_screen/stock_managment_screen.dart';
 import 'package:zoyo_bathware/constants/app_colors.dart';
-import 'package:zoyo_bathware/widgets/custom_widgets/back_botton.dart';
 
 class ManageScreen extends StatefulWidget {
   const ManageScreen({super.key});
@@ -120,7 +119,7 @@ class _ManageScreenState extends State<ManageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: backButton(context),
+        automaticallyImplyLeading: false,
         title: Text("Manage Products"),
         backgroundColor: AppColors.primaryColor,
       ),

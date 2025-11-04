@@ -21,7 +21,7 @@ class AllCategoriesScreen extends StatelessWidget {
 
           return Scaffold(
             appBar: AppBar(
-              leading: backButton(context),
+          
               title: const Text(
                 "All Categories",
                 style: TextStyle(
@@ -30,6 +30,7 @@ class AllCategoriesScreen extends StatelessWidget {
                   letterSpacing: 1.2,
                 ),
               ),
+            automaticallyImplyLeading: false,
               centerTitle: true,
               backgroundColor: AppColors.primaryColor,
               elevation: 5,
